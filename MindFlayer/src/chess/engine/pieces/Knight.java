@@ -46,7 +46,7 @@ public class Knight extends Piece {
             // Determine if the destination position is on the board
             if (IsDestinationPositionValid(destinationPosition)) {
                 // Determine whether the Knight is on the 1st, 2nd, 7th, or 8th file
-                if (AnyKnightFileExclusions(this.piecePosition, destinationPosition)) {
+                if (AnyKnightFileExclusions(this.piecePosition)) {
                     // The current offset will break the Knight's movement, so move to the next offset
                     continue;
                 }
@@ -75,63 +75,42 @@ public class Knight extends Piece {
     /**
      * @param currentPosition where the Knight is on the board
      * @param currentOffset   the current offset used for calculating the Knight's destination position
-     * @return whether the Knight is on the first file with a faulty offset
+     * @return whether the Knight is on the first or eighth file with a faulty offset
      */
-    private static boolean IsFirstFileExclusion(final int currentPosition, final int currentOffset) {
-        return FIRST_FILE[currentPosition] &&
+    private static boolean IsFirstEightFileExclusion(final int currentPosition, final int currentOffset) {
+        return (FIRST_FILE[currentPosition] &&
                (currentOffset == -17 ||
                 currentOffset == -10 ||
                 currentOffset == 6 ||
-                currentOffset == 15);
+                currentOffset == 15)) ||
+               (EIGHTH_FILE[currentPosition] &&
+               (currentOffset == -15 ||
+                currentOffset == -6 ||
+                currentOffset == 10 ||
+                currentOffset == 17));
     }
 
     /**
      * @param currentPosition where the Knight is on the board
      * @param currentOffset   the current offset used for calculating the Knight's destination position
-     * @return whether the Knight is on the second file with a faulty offset
+     * @return whether the Knight is on the second or seventh file with a faulty offset
      */
-    private static boolean IsSecondFileExclusion(final int currentPosition, final int currentOffset) {
-        return SECOND_FILE[currentPosition] &&
-                (currentOffset == -17 ||
-                 currentOffset == -10);
-    }
-
-    /**
-     * @param currentPosition where the Knight is on the board
-     * @param currentOffset   the current offset used for calculating the Knight's destination position
-     * @return whether the Knight is on the seventh file with a faulty offset
-     */
-    private static boolean IsSeventhFileExclusion(final int currentPosition, final int currentOffset) {
-        return SEVENTH_FILE[currentPosition] &&
-                (currentOffset == -17 ||
-                 currentOffset == -10);
-    }
-
-    /**
-     * @param currentPosition where the Knight is on the board
-     * @param currentOffset   the current offset used for calculating the Knight's destination position
-     * @return whether the Knight is on the eighth file with a faulty offset
-     */
-    private static boolean IsEighthFileExclusion(final int currentPosition, final int currentOffset) {
-        return EIGHTH_FILE[currentPosition] &&
-                (currentOffset == -15 ||
-                 currentOffset == -6 ||
-                 currentOffset == 10 ||
-                 currentOffset == 17);
+    private static boolean IsSecondSeventhFileExclusion(final int currentPosition, final int currentOffset) {
+        return (SECOND_FILE[currentPosition] && (currentOffset == -17 || currentOffset == -10)) ||
+               (SEVENTH_FILE[currentPosition] && (currentOffset == -17 || currentOffset == -10));
     }
 
     /**
      * A simpler way to determine whether the Knight is on the first, second, seventh, or eighth file.
      * For a Knight, a move cannot happen more than two files away.
      *
-     * @param currentPosition     where the Knight currently is
-     * @param destinationPosition where the Knight wants to move to
-     * @return whether there are any exclusions for the Knight
+     * @param currentPosition where the Knight is on the board
+     * @return whether the Knight is on the first, second, seventh, or eighth file
      */
-    private static boolean AnyKnightFileExclusions(final int currentPosition, final int destinationPosition) {
-        // Calculate the current and destination files
-        final int currentFile = (currentPosition % 8) + 1, destinationFile = (destinationPosition % 8) + 1;
+    private static boolean AnyKnightFileExclusions(final int currentPosition) {
+        // Calculate the current file
+        final int currentFile = (currentPosition % 8) + 1;
 
-        return Math.abs(currentFile - destinationFile) > 2;
+        return currentFile == 1 || currentFile == 2 || currentFile == 7 || currentFile == 8;
     }
 }

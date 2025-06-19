@@ -110,14 +110,17 @@ public class Pawn extends Piece {
      * @return whether the Pawn is on the first or eighth file with a faulty offset
      */
     private boolean AnyPawnFileExclusions(final int currentPosition, final int currentOffset) {
+        // Calculate the current file
+        final int currentFile = (currentPosition % 8) + 1;
+        
         switch (currentOffset) {
             case 7 -> {
-                return (FIRST_FILE[currentPosition] && this.pieceAlliance.isBlack()) ||
-                       (EIGHTH_FILE[currentPosition] && this.pieceAlliance.isWhite());
+                return (currentFile == 1 && this.pieceAlliance.isBlack()) ||
+                       (currentFile == 8 && this.pieceAlliance.isWhite());
             }
             case 9 -> {
-                return (FIRST_FILE[currentPosition] && this.pieceAlliance.isWhite()) ||
-                       (EIGHTH_FILE[currentPosition] && this.pieceAlliance.isBlack());
+                return (currentFile == 1 && this.pieceAlliance.isWhite()) ||
+                       (currentFile == 8 && this.pieceAlliance.isBlack());
             }
             default -> {return false;}
         }

@@ -48,8 +48,8 @@ public class Rook extends Piece {
             int destinationPosition = this.piecePosition + currentOffset;
             // Determine if the destination position is on the board
             while (IsDestinationPositionValid(destinationPosition)) {
-                // Determine whether the Rook is on the 1st, 2nd, 7th, or 8th file
-                if (AnyRookFileExclusions(this.piecePosition, currentOffset)) {
+                // Determine whether the Rook is on the 1st or 8th file
+                if (AnyRookFileExclusions(this.piecePosition)) {
                     // The current offset will break the Rook's movement, so move to the next offset
                     break;
                 }
@@ -79,11 +79,12 @@ public class Rook extends Piece {
 //----------------------------------------------------------------------------------------------------------------------
     /**
      * @param currentPosition where the Rook is on the board
-     * @param currentOffset   the current offset used for calculating the Rook's destination position
-     * @return whether the Rook is on the first file or eighth file with a faulty offset
+     * @return whether the Rook is on the first or eighth file
      */
-    private static boolean AnyRookFileExclusions(final int currentPosition, final int currentOffset) {
-        return (FIRST_FILE[currentPosition] && currentOffset == -1) ||
-               (EIGHTH_FILE[currentPosition] && currentOffset == 1);
+    private static boolean AnyRookFileExclusions(final int currentPosition) {
+        // Calculate the current file
+        final int currentFile = (currentPosition % 8) + 1;
+
+        return currentFile == 1 || currentFile == 8;
     }
 }
