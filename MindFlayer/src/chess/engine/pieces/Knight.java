@@ -76,7 +76,7 @@ public class Knight extends Piece {
     /**
      * @param currentPosition where the Knight is on the board
      * @param currentOffset   the current offset used for calculating the Knight's destination position
-     * @return whether the Knight is on the first file
+     * @return whether the Knight is on the first file with a faulty offset
      */
     private static boolean IsFirstFileExclusion(final int currentPosition, final int currentOffset) {
         return FIRST_FILE[currentPosition] &&
@@ -89,7 +89,7 @@ public class Knight extends Piece {
     /**
      * @param currentPosition where the Knight is on the board
      * @param currentOffset   the current offset used for calculating the Knight's destination position
-     * @return whether the Knight is on the second file
+     * @return whether the Knight is on the second file with a faulty offset
      */
     private static boolean IsSecondFileExclusion(final int currentPosition, final int currentOffset) {
         return SECOND_FILE[currentPosition] &&
@@ -100,7 +100,7 @@ public class Knight extends Piece {
     /**
      * @param currentPosition where the Knight is on the board
      * @param currentOffset   the current offset used for calculating the Knight's destination position
-     * @return whether the Knight is on the seventh file
+     * @return whether the Knight is on the seventh file with a faulty offset
      */
     private static boolean IsSeventhFileExclusion(final int currentPosition, final int currentOffset) {
         return SEVENTH_FILE[currentPosition] &&
@@ -111,7 +111,7 @@ public class Knight extends Piece {
     /**
      * @param currentPosition where the Knight is on the board
      * @param currentOffset   the current offset used for calculating the Knight's destination position
-     * @return whether the Knight is on the eighth file
+     * @return whether the Knight is on the eighth file with a faulty offset
      */
     private static boolean IsEighthFileExclusion(final int currentPosition, final int currentOffset) {
         return EIGHTH_FILE[currentPosition] &&
