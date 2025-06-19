@@ -4,4 +4,4 @@
 <p> For me, this is not only a way for me to practice and learn Java, but also a way for me to understand how chess works. </p> 
 <h2>Extra Info</h2>
 <p> Chess piece icons are from: https://github.com/GiorgioMegrelli/chess.com-boards-and-pieces/tree/master</p>
-<p> This project utilizes the Guava library (https://github.com/google/guava/releases) </p>
+<p> This project utilizes the Guava library: https://github.com/google/guava/releases </p>
