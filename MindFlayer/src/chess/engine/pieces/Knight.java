@@ -1,6 +1,8 @@
 package chess.engine.pieces;
 
 import chess.engine.board.Board;
+import chess.engine.moves.AttackMove;
+import chess.engine.moves.MajorMove;
 import chess.engine.moves.Move;
 import chess.engine.tiles.Tile;
 import com.google.common.collect.ImmutableList;
@@ -52,17 +54,15 @@ public class Knight extends Piece {
                 // Obtain the destination tile
                 final Tile destinationTile = board.getTile(destinationPosition);
                 if (!destinationTile.isTileOccupied()) {
-                    // TODO: implement new move
                     // The move counts as moving to an empty tile
-                    legalMoves.add(new Move());
+                    legalMoves.add(new MajorMove(board, this, destinationPosition));
                 } else {
                     // Determine the piece on the occupied tile
                     final Piece pieceOnTile = board.getTile(destinationPosition).getPiece();
                     // Determine whether the piece is the opponent's
                     if (this.pieceAlliance != pieceOnTile.getPieceAlliance()) {
-                        // TODO: implement new move
                         // The move counts as attacking the opponent's piece
-                        legalMoves.add(new Move());
+                        legalMoves.add(new AttackMove(board, this, destinationPosition, pieceOnTile));
                     }
                 }
             }

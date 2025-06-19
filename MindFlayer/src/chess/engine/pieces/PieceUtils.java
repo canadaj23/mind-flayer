@@ -1,5 +1,6 @@
 package chess.engine.pieces;
 
+import static chess.engine.utils.Constants.BoardConstants.TILES_PER_FILE;
 import static chess.engine.utils.Constants.BoardConstants.TOTAL_TILES;
 
 /**
@@ -33,7 +34,7 @@ public class PieceUtils {
 
         do {
             file[fileNumber] = true;
-            fileNumber += 8;
+            fileNumber += TILES_PER_FILE;
         } while (fileNumber < TOTAL_TILES);
 
         return file;
