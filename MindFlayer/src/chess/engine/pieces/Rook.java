@@ -27,7 +27,7 @@ public class Rook extends Piece {
      * @param pieceAlliance White/Black
      * @param piecePosition where the Rook is on the board
      */
-    public Rook(Alliance pieceAlliance, int piecePosition) {
+    public Rook(final Alliance pieceAlliance, final int piecePosition) {
         super(pieceAlliance, piecePosition);
     }
 //----------------------------------------------------------------------------------------------------------------------
@@ -40,9 +40,8 @@ public class Rook extends Piece {
      * @return a list of all the Rook's legal moves
      */
     @Override
-    public Collection<Move> calculateLegalMoves(Board board) {
+    public Collection<Move> calculateLegalMoves(final Board board) {
         final List<Move> legalMoves = new ArrayList<>();
-
         // Iterate through all the offsets to determine the Rook's legal moves
         for (final int currentOffset : ROOK_OFFSETS) {
             // Calculate the destination position

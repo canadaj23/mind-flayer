@@ -27,7 +27,7 @@ public class Queen extends Piece {
      * @param pieceAlliance White/Black
      * @param piecePosition where the Queen is on the board
      */
-    public Queen(Alliance pieceAlliance, int piecePosition) {
+    public Queen(final Alliance pieceAlliance, final int piecePosition) {
         super(pieceAlliance, piecePosition);
     }
 //----------------------------------------------------------------------------------------------------------------------
@@ -40,9 +40,8 @@ public class Queen extends Piece {
      * @return a list of all the Queen's legal moves
      */
     @Override
-    public Collection<Move> calculateLegalMoves(Board board) {
+    public Collection<Move> calculateLegalMoves(final Board board) {
         final List<Move> legalMoves = new ArrayList<>();
-
         // Iterate through all the offsets to determine the Queen's legal moves
         for (final int currentOffset : QUEEN_KING_OFFSETS) {
             // Calculate the destination position

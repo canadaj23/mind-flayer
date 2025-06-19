@@ -39,7 +39,6 @@ public class Knight extends Piece {
     @Override
     public Collection<Move> calculateLegalMoves(final Board board) {
         final List<Move> legalMoves = new ArrayList<>();
-
         // Iterate through all the offsets to determine the Knight's legal moves
         for (final int currentOffset : KNIGHT_OFFSETS) {
             // Calculate the destination position

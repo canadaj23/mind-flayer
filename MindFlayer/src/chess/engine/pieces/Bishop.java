@@ -41,9 +41,8 @@ public class Bishop extends Piece {
      * @return a list of all the Bishop's legal moves
      */
     @Override
-    public Collection<Move> calculateLegalMoves(Board board) {
+    public Collection<Move> calculateLegalMoves(final Board board) {
         final List<Move> legalMoves = new ArrayList<>();
-
         // Iterate through all the offsets to determine the Bishop's legal moves
         for (final int currentOffset : BISHOP_OFFSETS) {
             // Calculate the destination position
