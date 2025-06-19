@@ -112,7 +112,7 @@ public class Pawn extends Piece {
     private boolean AnyPawnFileExclusions(final int currentPosition, final int currentOffset) {
         // Calculate the current file
         final int currentFile = (currentPosition % 8) + 1;
-        
+
         switch (currentOffset) {
             case 7 -> {
                 return (currentFile == 1 && this.pieceAlliance.isBlack()) ||

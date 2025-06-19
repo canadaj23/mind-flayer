@@ -33,7 +33,7 @@ public abstract class Tile {
      * @param piece        the piece on the board
      * @return either an EmptyTile or OccupiedTile
      */
-    public static Tile createTile(final int tilePosition, final Piece piece) {
+    public static Tile CreateTile(final int tilePosition, final Piece piece) {
         return piece != null ? new OccupiedTile(tilePosition, piece) : EMPTY_TILES_CACHE.get(tilePosition);
     }
 //----------------------------------------------------------------------------------------------------------------------
