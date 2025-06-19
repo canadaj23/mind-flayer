@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static chess.engine.pieces.Piece.PieceType.QUEEN;
 import static chess.engine.pieces.PieceUtils.*;
 import static chess.engine.utils.Constants.PieceConstants.QUEEN_KING_OFFSETS;
 
@@ -86,5 +87,15 @@ public class Queen extends Piece {
         final int currentFile = (currentPosition % 8) + 1;
 
         return currentFile == 1 || currentFile == 8;
+    }
+//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------- Special Overridden Methods ---------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+    /**
+     * @return the Queen's first initial
+     */
+    @Override
+    public String toString() {
+        return QUEEN.toString();
     }
 }

@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static chess.engine.pieces.Piece.PieceType.BISHOP;
 import static chess.engine.pieces.PieceUtils.*;
-import static chess.engine.pieces.PieceUtils.EIGHTH_FILE;
 import static chess.engine.utils.Constants.PieceConstants.BISHOP_OFFSETS;
 
 /**
@@ -87,5 +87,15 @@ public class Bishop extends Piece {
         final int currentFile = (currentPosition % 8) + 1;
 
         return currentFile == 1 || currentFile == 8;
+    }
+//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------- Special Overridden Methods ---------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+    /**
+     * @return the Bishop's first initial
+     */
+    @Override
+    public String toString() {
+        return BISHOP.toString();
     }
 }

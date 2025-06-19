@@ -37,4 +37,14 @@ public final class OccupiedTile extends Tile {
     public Piece getPiece() {
         return this.pieceOnTile;
     }
+//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------- Special Overridden Methods ---------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+    /**
+     * @return the String representation of an occupied tile
+     */
+    @Override
+    public String toString() {
+        return getPiece().getPieceAlliance().isBlack() ? getPiece().toString().toLowerCase() : getPiece().toString();
+    }
 }

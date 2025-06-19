@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static chess.engine.pieces.Piece.PieceType.PAWN;
 import static chess.engine.pieces.PieceUtils.*;
 import static chess.engine.utils.Constants.PieceConstants.PAWN_OFFSETS;
 
@@ -124,5 +125,15 @@ public class Pawn extends Piece {
             }
             default -> {return false;}
         }
+    }
+//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------- Special Overridden Methods ---------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+    /**
+     * @return the Pawn's first initial
+     */
+    @Override
+    public String toString() {
+        return PAWN.toString();
     }
 }

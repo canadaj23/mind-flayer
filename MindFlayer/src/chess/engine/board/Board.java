@@ -1,16 +1,15 @@
 package chess.engine.board;
 
+import chess.engine.moves.Move;
 import chess.engine.pieces.*;
 import chess.engine.tiles.Tile;
 import com.google.common.collect.ImmutableList;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static chess.engine.pieces.Alliance.*;
 import static chess.engine.tiles.Tile.CreateTile;
+import static chess.engine.utils.Constants.BoardConstants.TILES_PER_RANK;
 import static chess.engine.utils.Constants.BoardConstants.TOTAL_TILES;
 
 /**
@@ -32,6 +31,9 @@ public class Board {
         this.gameBoard = createGameBoard(builder);
         this.whitePieces = CalculateActivePieces(this.gameBoard, WHITE);
         this.blackPieces = CalculateActivePieces(this.gameBoard, BLACK);
+
+        final Collection<Move> whiteStandardLegalMoves = CalculateLegalMoves(this.whitePieces);
+        final Collection<Move> blackStandardLegalMoves = CalculateLegalMoves(this.blackPieces);
     }
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Main Methods ----------------------------------------------------
@@ -53,9 +55,8 @@ public class Board {
      * @param alliance  White/Black
      * @return a Collection of all active pieces for White/Black
      */
-    private Collection<Piece> CalculateActivePieces(final List<Tile> gameBoard, final Alliance alliance) {
+    private static Collection<Piece> CalculateActivePieces(final List<Tile> gameBoard, final Alliance alliance) {
         final List<Piece> activePieces = new ArrayList<>();
-
         // Iterate through each tile to find all the active pieces
         for (final Tile currentTile : gameBoard) {
             // Determine if the current tile is occupied
@@ -71,6 +72,23 @@ public class Board {
         }
 
         return ImmutableList.copyOf(activePieces);
+    }
+
+    /**
+     * Determines which moves are currently legal.
+     *
+     * @param activePieces the player's active pieces
+     * @return a Collection of legal moves for a player
+     */
+    private Collection<Move> CalculateLegalMoves(final Collection<Piece> activePieces) {
+        final List<Move> legalMoves = new ArrayList<>();
+        // Iterate through all the active pieces
+        for (final Piece activePiece : activePieces) {
+            // Add that piece's legal moves to the list of every piece's legal moves
+            legalMoves.addAll(activePiece.calculateLegalMoves(this));
+        }
+
+        return ImmutableList.copyOf(legalMoves);
     }
 
     /**
@@ -151,6 +169,25 @@ public class Board {
             builder.setPiece(new Pawn(alliance, pawnIndex));
         }
     }
+//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------- Special Overridden Methods ---------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+    /**
+     * @return a String version of the chess board
+     */
+    @Override
+    public String toString() {
+        final StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < TOTAL_TILES; i++) {
+            builder.append(String.format("%3s", this.gameBoard.get(i).toString()));
+            if ((i + 1) % TILES_PER_RANK == 0) {
+                builder.append("\n");
+            }
+        }
+
+        return builder.toString();
+    }
+
 //######################################################################################################################
 //#################################################### Board Builder ###################################################
 //######################################################################################################################
@@ -168,6 +205,7 @@ public class Board {
          * Constructor for a Builder object.
          */
         public Builder() {
+            this.boardConfig = new HashMap<>();
         }
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Main Methods ----------------------------------------------------
