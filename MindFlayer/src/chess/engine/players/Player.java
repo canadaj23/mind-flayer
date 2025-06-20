@@ -2,6 +2,8 @@ package chess.engine.players;
 
 import chess.engine.board.Board;
 import chess.engine.moves.Move;
+import chess.engine.moves.MoveTransition;
+import chess.engine.pieces.Alliance;
 import chess.engine.pieces.King;
 import chess.engine.pieces.Piece;
 
@@ -46,6 +48,51 @@ public abstract class Player {
 
         throw new RuntimeException("Each player must have a King!");
     }
+
+    /**
+     * @param move the player's move
+     * @return whether the player's move is legal
+     */
+    public boolean isMoveLegal(final Move move) {
+        return this.legalMoves.contains(move);
+    }
+
+    // TODO: implement these methods
+    /**
+     * @return whether the player's King is in a check
+     */
+    public boolean isInCheck() {
+        return false;
+    }
+
+    /**
+     * @return whether the player's King is in a checkmate
+     */
+    public boolean isInCheckmate() {
+        return false;
+    }
+
+    /**
+     * @return whether the player's King is in a stalemate
+     */
+    public boolean isInStalemate() {
+        return false;
+    }
+
+    /**
+     * @return whether the player has castled
+     */
+    public boolean isInCastled() {
+        return false;
+    }
+
+    /**
+     * @param move the move to be performed
+     * @return the status of the move
+     */
+    public MoveTransition makeMove(final Move move) {
+        return null;
+    }
 //----------------------------------------------------------------------------------------------------------------------
 //-------------------------------------------------- Abstract Methods --------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -53,4 +100,15 @@ public abstract class Player {
      * @return the player's active pieces
      */
     public abstract Collection<Piece> getActivePieces();
+
+    /**
+     * @return the player's alliance
+     */
+    public abstract Alliance getPlayerAlliance();
+
+    /**
+     * @return the player's opponent
+     */
+    public abstract Player getOpponent();
+
 }

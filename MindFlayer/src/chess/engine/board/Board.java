@@ -3,6 +3,7 @@ package chess.engine.board;
 import chess.engine.moves.Move;
 import chess.engine.pieces.*;
 import chess.engine.players.BlackPlayer;
+import chess.engine.players.Player;
 import chess.engine.players.WhitePlayer;
 import chess.engine.tiles.Tile;
 import com.google.common.collect.ImmutableList;
@@ -143,6 +144,14 @@ public class Board {
      */
     public Collection<Piece> getPlayerActivePieces(final Alliance alliance) {
         return alliance.isBlack() ? this.blackPieces : this.whitePieces;
+    }
+
+    /**
+     * @param alliance the player's alliance
+     * @return the player's opponent
+     */
+    public Player getOpponent(final Alliance alliance) {
+        return alliance.isBlack() ? whitePlayer : blackPlayer;
     }
 //----------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------- Helper Methods ---------------------------------------------------
