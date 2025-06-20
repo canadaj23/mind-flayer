@@ -29,7 +29,7 @@ public class Queen extends Piece {
      * @param piecePosition where the Queen is on the board
      */
     public Queen(final Alliance pieceAlliance, final int piecePosition) {
-        super(pieceAlliance, piecePosition);
+        super(QUEEN, pieceAlliance, piecePosition);
     }
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Main Methods ----------------------------------------------------
@@ -46,30 +46,34 @@ public class Queen extends Piece {
         // Iterate through all the offsets to determine the Queen's legal moves
         for (final int currentOffset : QUEEN_KING_OFFSETS) {
             // Calculate the destination position
-            int destinationPosition = this.piecePosition + currentOffset;
+            int destinationPosition = this.piecePosition;
             // Determine if the destination position is on the board
             while (IsDestinationPositionValid(destinationPosition)) {
-                // Determine whether the Queen is on the 1st or 8th file
-                if (AnyQueenFileExclusions(this.piecePosition)) {
+                // Determine whether the Queen will be on the 1st or 8th file
+                if (AnyQueenFileExclusions(this.piecePosition, currentOffset)) {
                     // The current offset will break the Queen's movement, so move to the next offset
                     break;
                 }
-                // Obtain the destination tile
-                final Tile destinationTile = board.getTile(destinationPosition);
-                if (!destinationTile.isTileOccupied()) {
-                    // The move counts as moving to an empty tile
-                    legalMoves.add(new MajorMove(board, this, destinationPosition));
-                } else {
-                    // Determine the piece on the occupied tile
-                    final Piece pieceOnTile = board.getTile(destinationPosition).getPiece();
-                    // Determine whether the piece is the opponent's
-                    if (this.pieceAlliance != pieceOnTile.getPieceAlliance()) {
-                        // The move counts as attacking the opponent's piece
-                        legalMoves.add(new AttackMove(board, this, destinationPosition, pieceOnTile));
-                    }
-                    break;
-                }
+                // Increment the destination position with the current offset
                 destinationPosition += currentOffset;
+                // Determine whether the destination position is valid
+                if (IsDestinationPositionValid(destinationPosition)) {
+                    // Obtain the destination tile
+                    final Tile destinationTile = board.getTile(destinationPosition);
+                    if (!destinationTile.isTileOccupied()) {
+                        // The move counts as moving to an empty tile
+                        legalMoves.add(new MajorMove(board, this, destinationPosition));
+                    } else {
+                        // Determine the piece on the occupied tile
+                        final Piece pieceOnTile = board.getTile(destinationPosition).getPiece();
+                        // Determine whether the piece is the opponent's
+                        if (this.pieceAlliance != pieceOnTile.getPieceAlliance()) {
+                            // The move counts as attacking the opponent's piece
+                            legalMoves.add(new AttackMove(board, this, destinationPosition, pieceOnTile));
+                        }
+                        break;
+                    }
+                }
             }
         }
 
@@ -80,13 +84,12 @@ public class Queen extends Piece {
 //----------------------------------------------------------------------------------------------------------------------
     /**
      * @param currentPosition where the Queen is on the board
-     * @return whether the Queen is on the first or eighth file
+     * @param currentOffset   the current offset used for calculating the Queen's destination position
+     * @return whether the Queen is on the first or eighth file with a faulty offset
      */
-    private static boolean AnyQueenFileExclusions(final int currentPosition) {
-        // Calculate the current file
-        final int currentFile = (currentPosition % 8) + 1;
-
-        return currentFile == 1 || currentFile == 8;
+    private static boolean AnyQueenFileExclusions(final int currentPosition, final int currentOffset) {
+        return (FIRST_FILE[currentPosition] && (currentOffset == -9 || currentOffset == -1 || currentOffset == 7))  ||
+               (EIGHTH_FILE[currentPosition] && (currentOffset == -7|| currentOffset == 1 || currentOffset == 9));
     }
 //----------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------- Special Overridden Methods ---------------------------------------------

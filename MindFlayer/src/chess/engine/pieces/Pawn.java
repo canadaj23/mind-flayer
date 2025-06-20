@@ -27,7 +27,7 @@ public class Pawn extends Piece {
      * @param piecePosition where the Pawn is on the board
      */
     public Pawn(final Alliance pieceAlliance, final int piecePosition) {
-        super(pieceAlliance, piecePosition);
+        super(PAWN, pieceAlliance, piecePosition);
     }
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Main Methods ----------------------------------------------------
@@ -51,41 +51,41 @@ public class Pawn extends Piece {
                 continue;
             }
             // Figure out what to do with an empty/occupied tile
-            if (!board.getTile(destinationPosition).isTileOccupied()) { // The destination tile is empty
-                if (currentOffset == 8) {
-                    // TODO: implement a standard one-tile advance and one that leads to Pawn promotion
-                    // Perform a one-tile advance that could land on the first/eighth rank
+            if (currentOffset == 8 && !board.getTile(destinationPosition).isTileOccupied()) {
+                // TODO: implement one-tile advance with/without Pawn promotion
+                // One-tile advance with possible Pawn promotion
+                legalMoves.add(new MajorMove(board, this, destinationPosition));
+            } else if (currentOffset == 16 && this.isFirstMove() && pawnInInitialPosition()) {
+                // Determine the position between the start and destination positions
+                final int positionBetweenStartDestination = this.piecePosition +
+                                                            (this.pieceAlliance.getPawnDirection() * 8);
+                // Determine if the two tiles in front of the Pawn are empty
+                if (!board.getTile(positionBetweenStartDestination).isTileOccupied() &&
+                    !board.getTile(destinationPosition).isTileOccupied()) {
+                    // TODO: implement two-tile advance
+                    // Two-tile advance
                     legalMoves.add(new MajorMove(board, this, destinationPosition));
-                } else if (currentOffset == 16) {
-                    // Determine if it is the Pawn's first move
-                    if (this.isFirstMove() && pawnInInitialPosition()) {
-                        // Determine the tile position between the start and destination positions
-                        final int positionBetweenStartDestination =  this.piecePosition +
-                                (this.pieceAlliance.getPawnDirection() * 8);
-                        // Determine if that tile is empty
-                        if (!board.getTile(positionBetweenStartDestination).isTileOccupied()) {
-                            // TODO: implement a two-tile advance
-                            // Perform a two-tile advance
-                            legalMoves.add(new MajorMove(board, this, destinationPosition));
-                        }
-                    }
                 }
-            } else { // The destination tile is occupied
-                // Determine whether the current offset messes up the Pawn attack
-                if (!AnyPawnFileExclusions(this.piecePosition, currentOffset)) {
+            } else if (currentOffset == 7 && !anyPawnFileExclusions(this.piecePosition, currentOffset)) {
+                if (board.getTile(destinationPosition).isTileOccupied()) {
                     // Determine the piece on the occupied tile
                     final Piece pieceAtDestination = board.getTile(destinationPosition).getPiece();
-                    // Determine the other piece's alliance
+                    // Determine whether the piece is friendly
                     if (this.pieceAlliance != pieceAtDestination.getPieceAlliance()) {
-                        if (currentOffset == 7) {
-                            // TODO: implement Pawn attack that could result in a Pawn promotion
-                            // Perform a standard Pawn attack on the opponent's piece
-                            legalMoves.add(new MajorMove(board, this, destinationPosition));
-                        } else if (currentOffset == 9) {
-                            // TODO: implement En Passant Pawn attack
-                            // Perform a En Passant Pawn attack on the opponent's piece
-                            legalMoves.add(new MajorMove(board, this, destinationPosition));
-                        }
+                        // TODO: implement standard Pawn attack
+                        // Standard Pawn attack
+                        legalMoves.add(new MajorMove(board, this, destinationPosition));
+                    }
+                }
+            } else if (currentOffset == 9 && !anyPawnFileExclusions(this.piecePosition, currentOffset)) {
+                if (board.getTile(destinationPosition).isTileOccupied()) {
+                    // Determine the piece on the occupied tile
+                    final Piece pieceAtDestination = board.getTile(destinationPosition).getPiece();
+                    // Determine whether the piece is friendly
+                    if (this.pieceAlliance != pieceAtDestination.getPieceAlliance()) {
+                        // TODO: implement En Passant attack
+                        // En Passant attack
+                        legalMoves.add(new MajorMove(board, this, destinationPosition));
                     }
                 }
             }
@@ -106,22 +106,19 @@ public class Pawn extends Piece {
     }
 
     /**
-     * @param currentPosition where the Pawn is
+     * @param currentPosition where the Pawn is on the board
      * @param currentOffset   the offset used for calculating the Pawn's destination position
      * @return whether the Pawn is on the first or eighth file with a faulty offset
      */
-    private boolean AnyPawnFileExclusions(final int currentPosition, final int currentOffset) {
-        // Calculate the current file
-        final int currentFile = (currentPosition % 8) + 1;
-
+    private boolean anyPawnFileExclusions(final int currentPosition, final int currentOffset) {
         switch (currentOffset) {
             case 7 -> {
-                return (currentFile == 1 && this.pieceAlliance.isBlack()) ||
-                       (currentFile == 8 && this.pieceAlliance.isWhite());
+                return (FIRST_FILE[currentPosition] && this.pieceAlliance.isBlack()) ||
+                       (EIGHTH_FILE[currentPosition] && this.pieceAlliance.isWhite());
             }
             case 9 -> {
-                return (currentFile == 1 && this.pieceAlliance.isWhite()) ||
-                       (currentFile == 8 && this.pieceAlliance.isBlack());
+                return (FIRST_FILE[currentPosition] && this.pieceAlliance.isWhite()) ||
+                       (EIGHTH_FILE[currentPosition] && this.pieceAlliance.isBlack());
             }
             default -> {return false;}
         }

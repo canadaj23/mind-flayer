@@ -9,6 +9,7 @@ import java.util.Collection;
  * This class serves as a blueprint for all the chess pieces.
  */
 public abstract class Piece {
+    protected final PieceType pieceType;
     protected final int piecePosition;
     protected final Alliance pieceAlliance;
     // TODO: more work to do here
@@ -23,7 +24,8 @@ public abstract class Piece {
      * @param pieceAlliance White/Black
      * @param piecePosition where the piece is on the board
      */
-    protected Piece(final Alliance pieceAlliance, final int piecePosition) {
+    protected Piece(final PieceType pieceType, final Alliance pieceAlliance, final int piecePosition) {
+        this.pieceType = pieceType;
         this.pieceAlliance = pieceAlliance;
         this.piecePosition = piecePosition;
         this.firstMove = false;
@@ -52,7 +54,15 @@ public abstract class Piece {
     public int getPiecePosition() {
         return this.piecePosition;
     }
-//----------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * @return the type of piece
+     */
+    public PieceType getPieceType() {
+        return this.pieceType;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------
 //-------------------------------------------------- Abstract Methods --------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -68,20 +78,80 @@ public abstract class Piece {
 //###################################################### PieceType #####################################################
 //######################################################################################################################
     public enum PieceType {
-        PAWN("P"),
-        ROOK("R"),
-        KNIGHT("N"),
-        BISHOP("B"),
-        QUEEN("Q"),
-        KING("K");
+        PAWN("P") {
+            /**
+             * @return whether the piece is a King
+             */
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        },
+        ROOK("R") {
+            /**
+             * @return whether the piece is a King
+             */
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        },
+        KNIGHT("N") {
+            /**
+             * @return whether the piece is a King
+             */
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        },
+        BISHOP("B") {
+            /**
+             * @return whether the piece is a King
+             */
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        },
+        QUEEN("Q") {
+            /**
+             * @return whether the piece is a King
+             */
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        },
+        KING("K") {
+            /**
+             * @return whether the piece is a King
+             */
+            @Override
+            public boolean isKing() {
+                return true;
+            }
+        };
 
         private final String pieceInitial;
-    //----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Constructor -----------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
+    /**
+     * Constructor for a PieceType object.
+     *
+     * @param pieceInitial the piece's first initial
+     */
         PieceType(final String pieceInitial) {
             this.pieceInitial = pieceInitial;
         }
+//----------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------- Abstract Methods --------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+    /**
+     * @return whether the piece is a King
+     */
+    public abstract boolean isKing();
 //----------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------- Special Overridden Methods ---------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------

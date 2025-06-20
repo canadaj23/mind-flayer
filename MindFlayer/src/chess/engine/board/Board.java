@@ -2,6 +2,8 @@ package chess.engine.board;
 
 import chess.engine.moves.Move;
 import chess.engine.pieces.*;
+import chess.engine.players.BlackPlayer;
+import chess.engine.players.WhitePlayer;
 import chess.engine.tiles.Tile;
 import com.google.common.collect.ImmutableList;
 
@@ -19,6 +21,8 @@ import static chess.engine.utils.Constants.BoardConstants.TOTAL_TILES;
 public class Board {
     private final List<Tile> gameBoard;
     private final Collection<Piece> whitePieces, blackPieces;
+    private final WhitePlayer whitePlayer;
+    private final BlackPlayer blackPlayer;
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Constructor -----------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -34,6 +38,9 @@ public class Board {
 
         final Collection<Move> whiteStandardLegalMoves = CalculateLegalMoves(this.whitePieces);
         final Collection<Move> blackStandardLegalMoves = CalculateLegalMoves(this.blackPieces);
+
+        this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
+        this.blackPlayer = new BlackPlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
     }
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Main Methods ----------------------------------------------------
@@ -128,6 +135,14 @@ public class Board {
         builder.setMoveMaker(WHITE);
 
         return builder.build();
+    }
+
+    /**
+     * @param alliance White/Black
+     * @return all the player's active pieces
+     */
+    public Collection<Piece> getPlayerActivePieces(final Alliance alliance) {
+        return alliance.isBlack() ? this.blackPieces : this.whitePieces;
     }
 //----------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------- Helper Methods ---------------------------------------------------

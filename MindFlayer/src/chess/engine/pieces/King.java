@@ -29,7 +29,7 @@ public class King extends Piece {
      * @param piecePosition where the King is on the board
      */
     public King(final Alliance pieceAlliance, final int piecePosition) {
-        super(pieceAlliance, piecePosition);
+        super(KING, pieceAlliance, piecePosition);
     }
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Main Methods ----------------------------------------------------
@@ -49,8 +49,8 @@ public class King extends Piece {
             final int destinationPosition = this.piecePosition + currentOffset;
             // Determine if the destination position is on the board
             if (IsDestinationPositionValid(destinationPosition)) {
-                // Determine whether the King is on the 1st or 8th file
-                if (AnyKingFileExclusions(this.piecePosition)) {
+                // Determine whether the King will be on the 1st or 8th file
+                if (AnyKingFileExclusions(this.piecePosition, currentOffset)) {
                     // The current offset will break the King's movement, so move to the next offset
                     continue;
                 }
@@ -78,13 +78,12 @@ public class King extends Piece {
 //----------------------------------------------------------------------------------------------------------------------
     /**
      * @param currentPosition where the King is on the board
+     * @param currentOffset   the current offset used for calculating the King's destination position
      * @return whether the King is on the first or eighth file with a faulty offset
      */
-    private static boolean AnyKingFileExclusions(final int currentPosition) {
-        // Calculate the current file
-        final int currentFile = (currentPosition % 8) + 1;
-
-        return currentFile == 1 || currentFile == 8;
+    private static boolean AnyKingFileExclusions(final int currentPosition, final int currentOffset) {
+        return (FIRST_FILE[currentPosition] && (currentOffset == -9 || currentOffset == -1 || currentOffset == 7))  ||
+               (EIGHTH_FILE[currentPosition] && (currentOffset == -7|| currentOffset == 1 || currentOffset == 9));
     }
 //----------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------- Special Overridden Methods ---------------------------------------------
