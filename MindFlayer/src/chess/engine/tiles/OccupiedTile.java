@@ -45,6 +45,6 @@ public final class OccupiedTile extends Tile {
      */
     @Override
     public String toString() {
-        return getPiece().getPieceAlliance().isBlack() ? getPiece().toString().toLowerCase() : getPiece().toString();
+        return getPiece().getAlliance().isBlack() ? getPiece().toString().toLowerCase() : getPiece().toString();
     }
 }

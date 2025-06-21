@@ -61,7 +61,7 @@ public class Knight extends Piece {
                     // Determine the piece on the occupied tile
                     final Piece pieceOnTile = board.getTile(destinationPosition).getPiece();
                     // Determine whether the piece is the opponent's
-                    if (this.pieceAlliance != pieceOnTile.getPieceAlliance()) {
+                    if (this.pieceAlliance != pieceOnTile.getAlliance()) {
                         // The move counts as attacking the opponent's piece
                         legalMoves.add(new AttackMove(board, this, destinationPosition, pieceOnTile));
                     }
@@ -78,7 +78,7 @@ public class Knight extends Piece {
      */
     @Override
     public Knight movePiece(final Move move) {
-        return new Knight(move.getMovedPiece().getPieceAlliance(), move.getDestinationPosition());
+        return new Knight(move.getMovedPiece().getAlliance(), move.getDestinationPosition());
     }
 //----------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------- Helper Methods ---------------------------------------------------

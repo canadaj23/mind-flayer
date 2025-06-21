@@ -36,7 +36,15 @@ public abstract class Tile {
     public static Tile CreateTile(final int tilePosition, final Piece piece) {
         return piece != null ? new OccupiedTile(tilePosition, piece) : EMPTY_TILES_CACHE.get(tilePosition);
     }
-//----------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * @return the tile's position
+     */
+    public int getTilePosition() {
+        return this.tilePosition;
+    }
+
+    //----------------------------------------------------------------------------------------------------------------------
 //-------------------------------------------------- Abstract Methods --------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
     /**

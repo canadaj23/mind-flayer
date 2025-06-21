@@ -7,6 +7,7 @@ import chess.engine.pieces.Alliance;
 import chess.engine.pieces.King;
 import chess.engine.pieces.Piece;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,7 +36,8 @@ public abstract class Player {
     public Player(final Board board, final Collection<Move> legalMoves, final Collection<Move> opponentMoves) {
         this.board = board;
         this.playerKing = establishKing();
-        this.legalMoves = legalMoves;
+        this.legalMoves = ImmutableList.copyOf(Iterables.concat(legalMoves,
+                                                                calculateKingCastles(legalMoves, opponentMoves)));
         this.inCheck = !CalculateAttacksOnTile(this.playerKing.getPiecePosition(), opponentMoves).isEmpty();
     }
 //----------------------------------------------------------------------------------------------------------------------
@@ -63,7 +65,7 @@ public abstract class Player {
      * @param moves         the Collection of the opponent's legal moves
      * @return a Collection of all the attacks on the player's King
      */
-    protected Collection<Move> CalculateAttacksOnTile(final int piecePosition, final Collection<Move> moves) {
+    protected static Collection<Move> CalculateAttacksOnTile(final int piecePosition, final Collection<Move> moves) {
         final List<Move> attackMoves = new ArrayList<>();
         // Iterate through all the moves to determine attack moves
         for (final Move move : moves) {

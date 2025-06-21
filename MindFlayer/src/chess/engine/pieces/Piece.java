@@ -4,7 +4,6 @@ import chess.engine.board.Board;
 import chess.engine.moves.Move;
 
 import java.util.Collection;
-import java.util.Objects;
 
 /**
  * This class serves as a blueprint for all the chess pieces.
@@ -40,7 +39,7 @@ public abstract class Piece {
     /**
      * @return the piece's alliance
      */
-    public Alliance getPieceAlliance() {
+    public Alliance getAlliance() {
         return this.pieceAlliance;
     }
 
@@ -104,7 +103,7 @@ public abstract class Piece {
 
         return piecePosition == otherPiece.getPiecePosition() &&
                 pieceType == otherPiece.getPieceType() &&
-                pieceAlliance == otherPiece.getPieceAlliance() &&
+                pieceAlliance == otherPiece.getAlliance() &&
                 firstMove == otherPiece.isFirstMove();
     }
 

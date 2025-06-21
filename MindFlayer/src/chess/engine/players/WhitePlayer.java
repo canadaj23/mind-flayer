@@ -2,8 +2,11 @@ package chess.engine.players;
 
 import chess.engine.board.Board;
 import chess.engine.moves.Move;
+import chess.engine.moves.castle.KingSideCastleMove;
+import chess.engine.moves.castle.QueenSideCastleMove;
 import chess.engine.pieces.Alliance;
 import chess.engine.pieces.Piece;
+import chess.engine.pieces.Rook;
 import chess.engine.tiles.Tile;
 import com.google.common.collect.ImmutableList;
 
@@ -48,8 +51,6 @@ public class WhitePlayer extends Player {
         return WHITE;
     }
 
-
-
     /**
      * @return the player's opponent
      */
@@ -66,37 +67,53 @@ public class WhitePlayer extends Player {
     @Override
     protected Collection<Move> calculateKingCastles(final Collection<Move> playerLegals,
                                                     final Collection<Move> opponentLegals) {
+        // Non-PlayerUtils version
         final List<Move> kingCastles = new ArrayList<>();
 
         if (this.playerKing.isFirstMove() && !this.isInCheck()) {
             /* White's King-side castle */
-            // Determine whether the two tiles to the left of the King are empty
+            // Determine whether the two tiles to the right of the King are empty
             if (!this.board.getTile(61).isTileOccupied() &&
                 !this.board.getTile(62).isTileOccupied()) {
                 // Obtain the tile the King-side Rook should be on
                 final Tile rookTile = this.board.getTile(63);
+                // Determine if the tile is occupied and it is the Rook's first move
                 if (rookTile.isTileOccupied() && rookTile.getPiece().isFirstMove()) {
+                    // Determine if there are no attacks on the empty tiles and that the piece is a Rook
                     if (CalculateAttacksOnTile(61, opponentLegals).isEmpty() &&
                         CalculateAttacksOnTile(62, opponentLegals).isEmpty() &&
                         rookTile.getPiece().getPieceType().isRook()) {
-                        // TODO: add King-side castle
-                        kingCastles.add(null);
+                        // The move is a King-side castle
+                        kingCastles.add(new KingSideCastleMove(this.board,
+                                                               this.playerKing,
+                                                               62,
+                                                               (Rook) rookTile.getPiece(),
+                                                               rookTile.getTilePosition(),
+                                                               61));
                     }
                 }
             }
-            /* Queen-side castle */
-            if (!this.board.getTile(1).isTileOccupied() &&
-                    !this.board.getTile(2).isTileOccupied() &&
-                    !this.board.getTile(3).isTileOccupied()) {
-                // Obtain the tile the King-side Rook should be on
-                final Tile rookTile = this.board.getTile(0);
+            /* White's Queen-side castle */
+            // Determine whether the three tiles to the left of the King are empty
+            if (!this.board.getTile(57).isTileOccupied() &&
+                !this.board.getTile(58).isTileOccupied() &&
+                !this.board.getTile(59).isTileOccupied()) {
+                // Obtain the tile the Queen-side Rook should be on
+                final Tile rookTile = this.board.getTile(56);
+                // Determine if the tile is occupied and it is the Rook's first move
                 if (rookTile.isTileOccupied() && rookTile.getPiece().isFirstMove()) {
-                    if (CalculateAttacksOnTile(1, opponentLegals).isEmpty() &&
-                            CalculateAttacksOnTile(2, opponentLegals).isEmpty() &&
-                            CalculateAttacksOnTile(3, opponentLegals).isEmpty() &&
-                            rookTile.getPiece().getPieceType().isRook()) {
-                        // TODO: add Queen-side castle
-                        kingCastles.add(null);
+                    // Determine if there are no attacks on the empty tiles and that the piece is a Rook
+                    if (CalculateAttacksOnTile(57, opponentLegals).isEmpty() &&
+                        CalculateAttacksOnTile(58, opponentLegals).isEmpty() &&
+                        CalculateAttacksOnTile(59, opponentLegals).isEmpty() &&
+                        rookTile.getPiece().getPieceType().isRook()) {
+                        // The move is a Queen-side castle
+                        kingCastles.add(new QueenSideCastleMove(this.board,
+                                                                this.playerKing,
+                                                                58,
+                                                                (Rook) rookTile.getPiece(),
+                                                                rookTile.getTilePosition(),
+                                                                59));
                     }
                 }
             }
