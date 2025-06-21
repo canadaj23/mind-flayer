@@ -72,7 +72,7 @@ abstract class CastleMove extends Move {
         builder.setPiece(this.movedPiece.movePiece(this));
         // TODO: look into the first move of normal pieces
         // Move the moved Rook
-        builder.setPiece(new Rook(this.castleRook.getAlliance(), this.castleRookEnd));
+        builder.setPiece(new Rook(this.castleRook.getPieceAlliance(), this.castleRookEnd));
         // Set the next move maker to be the opponent
         builder.setMoveMaker(this.board.getCurrentPlayer().getOpponent().getAlliance());
 

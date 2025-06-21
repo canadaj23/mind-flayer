@@ -75,7 +75,7 @@ public class Board {
                 // Determine the piece on the occupied tile
                 final Piece pieceOnTile = currentTile.getPiece();
                 // Determine if the piece is the player's
-                if (alliance == pieceOnTile.getAlliance()) {
+                if (alliance == pieceOnTile.getPieceAlliance()) {
                     // Add the piece to the list if the alliances are the same
                     activePieces.add(pieceOnTile);
                 }

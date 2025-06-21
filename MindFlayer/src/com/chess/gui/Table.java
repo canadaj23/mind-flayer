@@ -1,10 +1,17 @@
 package com.chess.gui;
 
+import com.chess.engine.board.Board;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.chess.engine.board.Board.*;
 import static com.chess.engine.utils.Constants.BoardConstants.TOTAL_TILES;
 
 /**
@@ -13,11 +20,20 @@ import static com.chess.engine.utils.Constants.BoardConstants.TOTAL_TILES;
 public class Table {
     private final JFrame gameFrame;
     private final BoardPanel boardPanel;
+    private final Board chessBoard;
 
-    private final static float SCALE = 2.0f;
+    // Frame/Panel dimensions
+    private final static float SCALE = 1.5f;
     private final static Dimension OUTER_FRAME_DIMENSION = new Dimension((int) (600 * SCALE), (int) (600 * SCALE));
     private final static Dimension BOARD_PANEL_DIMENSION = new Dimension((int) (400 * SCALE), (int) (350 * SCALE));
     private final static Dimension TILE_PANEL_DIMENSION = new Dimension((int) (10 * SCALE), (int) (10 * SCALE));
+
+    // Tile colors
+    private final Color lightTileColor = Color.decode("#eeeed2");
+    private final Color darkTileColor = Color.decode("#769656");
+
+    // Images location
+    private final String defaultImagePath = "res/chess_com/";
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Constructor -----------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -30,6 +46,8 @@ public class Table {
 
         final JMenuBar tableMenuBar = createTableMenuBar();
         this.gameFrame.setJMenuBar(tableMenuBar);
+
+        this.chessBoard = createStandardBoard();
 
         this.boardPanel = new BoardPanel();
         this.gameFrame.add(this.boardPanel, BorderLayout.CENTER);
@@ -77,7 +95,7 @@ public class Table {
     /**
      * This class represents the visual board component.
      */
-    private static class BoardPanel extends JPanel {
+    private class BoardPanel extends JPanel {
         final List<TilePanel> boardTiles;
     //------------------------------------------------------------------------------------------------------------------
     //-------------------------------------------------- Constructor ---------------------------------------------------
@@ -113,21 +131,43 @@ public class Table {
     /**
      * This class represents each visual tile component to do added to the BoardPanel.
      */
-    private static class TilePanel extends JPanel {
+    private class TilePanel extends JPanel {
         private final int tileID;
-
+        //--------------------------------------------------------------------------------------------------------------
+        //------------------------------------------------ Constructor -------------------------------------------------
+        //--------------------------------------------------------------------------------------------------------------
         protected TilePanel(final BoardPanel boardPanel, final int tileID) {
             super(new GridBagLayout());
             this.tileID = tileID;
             setPreferredSize(TILE_PANEL_DIMENSION);
             assignTileColor();
+            assignTilePieceIcon(chessBoard);
             validate();
+        }
+        //--------------------------------------------------------------------------------------------------------------
+        //------------------------------------------------ Main Methods ------------------------------------------------
+        //--------------------------------------------------------------------------------------------------------------
+        private void assignTilePieceIcon(final Board board) {
+            this.removeAll();
+
+            if (board.getTile(this.tileID).isTileOccupied()) {
+                try {
+                    final BufferedImage image = ImageIO.read(new File(defaultImagePath +
+                            board.getTile(this.tileID).getPiece().getPieceAlliance().toString().charAt(0) +
+                            board.getTile(this.tileID).getPiece().toString() + ".png"));
+                    add(new JLabel(new ImageIcon(image)));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         /**
          * Assigns a tile to a color based on being even or odd.
          */
         private void assignTileColor() {
+            boolean isLight = ((tileID + tileID / 8) % 2 == 0);
+            setBackground(isLight ? lightTileColor : darkTileColor);
         }
     }
 }

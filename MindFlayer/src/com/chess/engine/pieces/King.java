@@ -63,7 +63,7 @@ public class King extends Piece {
                     // Determine the piece on the occupied tile
                     final Piece pieceOnTile = board.getTile(destinationPosition).getPiece();
                     // Determine whether the piece is the opponent's
-                    if (this.pieceAlliance != pieceOnTile.getAlliance()) {
+                    if (this.pieceAlliance != pieceOnTile.getPieceAlliance()) {
                         // The move counts as attacking the opponent's piece
                         legalMoves.add(new AttackMove(board, this, destinationPosition, pieceOnTile));
                     }
@@ -80,7 +80,7 @@ public class King extends Piece {
      */
     @Override
     public King movePiece(final Move move) {
-        return new King(move.getMovedPiece().getAlliance(), move.getDestinationPosition());
+        return new King(move.getMovedPiece().getPieceAlliance(), move.getDestinationPosition());
     }
 //----------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------- Helper Methods ---------------------------------------------------

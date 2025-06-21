@@ -45,7 +45,7 @@ public class Pawn extends Piece {
         for (final int currentOffset : PAWN_OFFSETS) {
             // Calculate the destination position
             final int destinationPosition = this.piecePosition +
-                                            (this.getAlliance().getPawnDirection() * currentOffset);
+                                            (this.getPieceAlliance().getPawnDirection() * currentOffset);
             // Move on to the next offset if the tile ahead of the Pawn is occupied
             if (!IsDestinationPositionValid(destinationPosition)) {
                 continue;
@@ -71,7 +71,7 @@ public class Pawn extends Piece {
                     // Determine the piece on the occupied tile
                     final Piece pieceAtDestination = board.getTile(destinationPosition).getPiece();
                     // Determine whether the piece is friendly
-                    if (this.pieceAlliance != pieceAtDestination.getAlliance()) {
+                    if (this.pieceAlliance != pieceAtDestination.getPieceAlliance()) {
                         // TODO: implement standard Pawn attack
                         // Standard Pawn attack
                         legalMoves.add(new MajorMove(board, this, destinationPosition));
@@ -82,7 +82,7 @@ public class Pawn extends Piece {
                     // Determine the piece on the occupied tile
                     final Piece pieceAtDestination = board.getTile(destinationPosition).getPiece();
                     // Determine whether the piece is friendly
-                    if (this.pieceAlliance != pieceAtDestination.getAlliance()) {
+                    if (this.pieceAlliance != pieceAtDestination.getPieceAlliance()) {
                         // TODO: implement En Passant attack
                         // En Passant attack
                         legalMoves.add(new MajorMove(board, this, destinationPosition));
@@ -100,7 +100,7 @@ public class Pawn extends Piece {
      */
     @Override
     public Pawn movePiece(final Move move) {
-        return new Pawn(move.getMovedPiece().getAlliance(), move.getDestinationPosition());
+        return new Pawn(move.getMovedPiece().getPieceAlliance(), move.getDestinationPosition());
     }
 //----------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------- Helper Methods ---------------------------------------------------
@@ -110,8 +110,8 @@ public class Pawn extends Piece {
      */
     private boolean pawnInInitialPosition() {
         final int currentRank = (this.piecePosition / 8) + 1;
-        return (this.getAlliance().isBlack() && currentRank == 2) ||
-               (this.getAlliance().isWhite() && currentRank == 7);
+        return (this.getPieceAlliance().isBlack() && currentRank == 2) ||
+               (this.getPieceAlliance().isWhite() && currentRank == 7);
     }
 
     /**

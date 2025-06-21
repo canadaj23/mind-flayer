@@ -36,7 +36,7 @@ public abstract class Piece {
     /**
      * @return the piece's alliance
      */
-    public Alliance getAlliance() {
+    public Alliance getPieceAlliance() {
         return this.pieceAlliance;
     }
 
@@ -98,7 +98,7 @@ public abstract class Piece {
 
         return piecePosition == otherPiece.getPiecePosition() &&
                 pieceType == otherPiece.getPieceType() &&
-                pieceAlliance == otherPiece.getAlliance() &&
+                pieceAlliance == otherPiece.getPieceAlliance() &&
                 firstMove == otherPiece.isFirstMove();
     }
 
