@@ -28,4 +28,11 @@ public class MoveTransition {
     public MoveStatus getMoveStatus() {
         return this.moveStatus;
     }
+
+    /**
+     * @return the transition board (subsequent board after a move is made)
+     */
+    public Board getTransitionBoard() {
+        return this.transitionBoard;
+    }
 }
