@@ -1,7 +1,7 @@
 package chess.engine.pieces;
 
 import chess.engine.board.Board;
-import chess.engine.moves.MajorMove;
+import chess.engine.moves.other.MajorMove;
 import chess.engine.moves.Move;
 import com.google.common.collect.ImmutableList;
 
@@ -92,6 +92,15 @@ public class Pawn extends Piece {
         }
 
         return ImmutableList.copyOf(legalMoves);
+    }
+
+    /**
+     * @param move what is forcing an updated piece to be made
+     * @return the moved piece at its destination position after a move is made
+     */
+    @Override
+    public Pawn movePiece(final Move move) {
+        return new Pawn(move.getMovedPiece().getPieceAlliance(), move.getDestinationPosition());
     }
 //----------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------- Helper Methods ---------------------------------------------------

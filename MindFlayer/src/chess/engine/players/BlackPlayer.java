@@ -8,7 +8,6 @@ import chess.engine.pieces.Piece;
 import java.util.Collection;
 
 import static chess.engine.pieces.Alliance.BLACK;
-import static chess.engine.pieces.Alliance.WHITE;
 
 public class BlackPlayer extends Player {
 //----------------------------------------------------------------------------------------------------------------------
@@ -41,7 +40,7 @@ public class BlackPlayer extends Player {
      * @return the player's alliance
      */
     @Override
-    public Alliance getPlayerAlliance() {
+    public Alliance getAlliance() {
         return BLACK;
     }
 
@@ -51,5 +50,15 @@ public class BlackPlayer extends Player {
     @Override
     public Player getOpponent() {
         return this.board.getOpponent(BLACK);
+    }
+
+    /**
+     * @param playerLegals   the player's legal moves
+     * @param opponentLegals the opponent's legal moves
+     * @return a Collection of all of Black's available castles
+     */
+    @Override
+    protected Collection<Move> calculateKingCastles(Collection<Move> playerLegals, Collection<Move> opponentLegals) {
+        return null;
     }
 }

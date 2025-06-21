@@ -2,7 +2,7 @@ package chess.engine.players;
 
 import chess.engine.board.Board;
 import chess.engine.moves.Move;
-import chess.engine.moves.MoveTransition;
+import chess.engine.moves.misc.MoveTransition;
 import chess.engine.pieces.Alliance;
 import chess.engine.pieces.King;
 import chess.engine.pieces.Piece;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static chess.engine.moves.MoveStatus.*;
+import static chess.engine.moves.misc.MoveStatus.*;
 
 /**
  * This class serves as a blueprint for White and Black players.
@@ -63,7 +63,7 @@ public abstract class Player {
      * @param moves         the Collection of the opponent's legal moves
      * @return a Collection of all the attacks on the player's King
      */
-    private Collection<Move> CalculateAttacksOnTile(final int piecePosition, final Collection<Move> moves) {
+    protected Collection<Move> CalculateAttacksOnTile(final int piecePosition, final Collection<Move> moves) {
         final List<Move> attackMoves = new ArrayList<>();
         // Iterate through all the moves to determine attack moves
         for (final Move move : moves) {
@@ -75,6 +75,13 @@ public abstract class Player {
         }
 
         return ImmutableList.copyOf(attackMoves);
+    }
+
+    /**
+     * @return the player's legal moves
+     */
+    public Collection<Move> getLegalMoves() {
+        return this.legalMoves;
     }
 
     /**
@@ -91,7 +98,6 @@ public abstract class Player {
         return this.inCheck;
     }
 
-    // TODO: implement these methods
     /**
      * @return whether the player's King is in a checkmate
      */
@@ -146,13 +152,6 @@ public abstract class Player {
     private King getPlayerKing() {
         return this.playerKing;
     }
-
-    /**
-     * @return the player's legal moves
-     */
-    private Collection<Move> getLegalMoves() {
-        return this.legalMoves;
-    }
 //----------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------- Helper Methods ---------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -184,11 +183,18 @@ public abstract class Player {
     /**
      * @return the player's alliance
      */
-    public abstract Alliance getPlayerAlliance();
+    public abstract Alliance getAlliance();
 
     /**
      * @return the player's opponent
      */
     public abstract Player getOpponent();
 
+    /**
+     * @param playerLegals   the player's legal moves
+     * @param opponentLegals the opponent's legal moves
+     * @return a Collection of all the available castles
+     */
+    protected abstract Collection<Move> calculateKingCastles(final Collection<Move> playerLegals,
+                                                             final Collection<Move> opponentLegals);
 }

@@ -1,5 +1,9 @@
 package chess.engine.pieces;
 
+import chess.engine.players.BlackPlayer;
+import chess.engine.players.Player;
+import chess.engine.players.WhitePlayer;
+
 public enum Alliance {
     WHITE {
         /**
@@ -24,6 +28,16 @@ public enum Alliance {
         @Override
         public boolean isBlack() {
             return false;
+        }
+
+        /**
+         * @param whitePlayer White
+         * @param blackPlayer Black
+         * @return whose turn it is
+         */
+        @Override
+        public Player choosePlayer(final WhitePlayer whitePlayer, final BlackPlayer blackPlayer) {
+            return whitePlayer;
         }
     },
     BLACK {
@@ -50,10 +64,21 @@ public enum Alliance {
         public boolean isBlack() {
             return true;
         }
+
+        /**
+         * @param whitePlayer White
+         * @param blackPlayer Black
+         * @return whose turn it is
+         */
+        @Override
+        public Player choosePlayer(final WhitePlayer whitePlayer, final BlackPlayer blackPlayer) {
+            return blackPlayer;
+        }
     };
 //----------------------------------------------------------------------------------------------------------------------
 //-------------------------------------------------- Abstract Methods --------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
+
     /**
      * @return the direction the Pawns go in a certain alliance
      */
@@ -68,4 +93,11 @@ public enum Alliance {
      * @return whether the piece is black
      */
     public abstract boolean isBlack();
+
+    /**
+     * @param whitePlayer White
+     * @param blackPlayer Black
+     * @return whose turn it is
+     */
+    public abstract Player choosePlayer(final WhitePlayer whitePlayer, final BlackPlayer blackPlayer);
 }

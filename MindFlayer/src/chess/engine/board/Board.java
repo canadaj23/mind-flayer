@@ -7,6 +7,7 @@ import chess.engine.players.Player;
 import chess.engine.players.WhitePlayer;
 import chess.engine.tiles.Tile;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 
 import java.util.*;
 
@@ -43,7 +44,7 @@ public class Board {
 
         this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
         this.blackPlayer = new BlackPlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
-        this.currentPlayer = null;
+        this.currentPlayer = builder.nextMoveMaker.choosePlayer(this.whitePlayer, this.blackPlayer);
     }
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Main Methods ----------------------------------------------------
@@ -162,6 +163,14 @@ public class Board {
     public Player getCurrentPlayer() {
         return this.currentPlayer;
     }
+
+    /**
+     * @return an Iterable of all the players' (White and Black) legal moves
+     */
+    public Iterable<Move> getAllLegalMoves() {
+        return Iterables.unmodifiableIterable(Iterables.concat(this.whitePlayer.getLegalMoves(),
+                                                               this.blackPlayer.getLegalMoves()));
+    }
 //----------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------- Helper Methods ---------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -220,7 +229,6 @@ public class Board {
 
         return builder.toString();
     }
-
 //######################################################################################################################
 //#################################################### Board Builder ###################################################
 //######################################################################################################################
@@ -231,6 +239,7 @@ public class Board {
     public static class Builder {
         private Map<Integer, Piece> boardConfig;
         private Alliance nextMoveMaker;
+        Pawn enPassantPawn;
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Constructor -----------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -268,6 +277,13 @@ public class Board {
             this.nextMoveMaker = nextMoveMaker;
 
             return this;
+        }
+
+        /**
+         * @param enPassantPawn the Pawn that made the two-tile advance
+         */
+        public void setEnPassantPawn(final Pawn enPassantPawn) {
+            this.enPassantPawn = enPassantPawn;
         }
     }
 }
