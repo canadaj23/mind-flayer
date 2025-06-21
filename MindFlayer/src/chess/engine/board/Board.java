@@ -24,6 +24,7 @@ public class Board {
     private final Collection<Piece> whitePieces, blackPieces;
     private final WhitePlayer whitePlayer;
     private final BlackPlayer blackPlayer;
+    private final Player currentPlayer;
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Constructor -----------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -42,6 +43,7 @@ public class Board {
 
         this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
         this.blackPlayer = new BlackPlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
+        this.currentPlayer = null;
     }
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Main Methods ----------------------------------------------------
@@ -152,6 +154,13 @@ public class Board {
      */
     public Player getOpponent(final Alliance alliance) {
         return alliance.isBlack() ? whitePlayer : blackPlayer;
+    }
+
+    /**
+     * @return whose turn it currently is
+     */
+    public Player getCurrentPlayer() {
+        return this.currentPlayer;
     }
 //----------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------- Helper Methods ---------------------------------------------------

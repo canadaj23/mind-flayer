@@ -20,4 +20,14 @@ public class MajorMove extends Move {
     public MajorMove(final Board board, final Piece movedPiece, final int destinationPosition) {
         super(board, movedPiece, destinationPosition);
     }
+//----------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------- Main Methods ----------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+    /**
+     * @return a new board after the move is made
+     */
+    @Override
+    public Board execute() {
+        return null;
+    }
 }

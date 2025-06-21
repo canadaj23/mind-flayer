@@ -26,4 +26,14 @@ public class AttackMove extends Move {
         super(board, movedPiece, destinationPosition);
         this.attackedPiece = attackedPiece;
     }
+//----------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------- Main Methods ----------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+    /**
+     * @return a new board after the move is made
+     */
+    @Override
+    public Board execute() {
+        return null;
+    }
 }
