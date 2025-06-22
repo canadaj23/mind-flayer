@@ -1,6 +1,7 @@
 package com.chess.engine.moves.other;
 
 import com.chess.engine.board.Board;
+import com.chess.engine.board.BoardUtils;
 import com.chess.engine.moves.Move;
 import com.chess.engine.pieces.Piece;
 
@@ -22,6 +23,21 @@ public class MajorMove extends Move {
         super(board, movedPiece, destinationPosition);
     }
 //----------------------------------------------------------------------------------------------------------------------
-//---------------------------------------------------- Main Methods ----------------------------------------------------
+//--------------------------------------------- Special Overridden Methods ---------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
+    /**
+     * Checks for object equality on top of reference equality.
+     *
+     * @param other the other possible move
+     * @return whether the two objects are the same
+     */
+    @Override
+    public boolean equals(final Object other) {
+        return this == other || (other instanceof MajorMove && super.equals(other));
+    }
+
+    @Override
+    public String toString() {
+        return movedPiece.getPieceType().toString() + BoardUtils.GetPositionStringAtPosition(this.destinationPosition);
+    }
 }

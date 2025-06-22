@@ -26,7 +26,18 @@ public class Knight extends Piece {
      * @param piecePosition where the Knight is on the board
      */
     public Knight(final Alliance pieceAlliance, final int piecePosition) {
-        super(KNIGHT, pieceAlliance, piecePosition);
+        super(KNIGHT, pieceAlliance, piecePosition, true);
+    }
+
+    /**
+     * Constructor for a Knight object.
+     *
+     * @param pieceAlliance White/Black
+     * @param piecePosition where the Knight is on the board
+     * @param firstMove     whether it is the Knight's first move
+     */
+    public Knight(final Alliance pieceAlliance, final int piecePosition, final boolean firstMove) {
+        super(KNIGHT, pieceAlliance, piecePosition, firstMove);
     }
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Main Methods ----------------------------------------------------

@@ -29,7 +29,18 @@ public class Rook extends Piece {
      * @param piecePosition where the Rook is on the board
      */
     public Rook(final Alliance pieceAlliance, final int piecePosition) {
-        super(ROOK, pieceAlliance, piecePosition);
+        super(ROOK, pieceAlliance, piecePosition, true);
+    }
+
+    /**
+     * Constructor for a Rook object.
+     *
+     * @param pieceAlliance White/Black
+     * @param piecePosition where the Rook is on the board
+     * @param firstMove     whether it is the Rook's first move
+     */
+    public Rook(final Alliance pieceAlliance, final int piecePosition, final boolean firstMove) {
+        super(ROOK, pieceAlliance, piecePosition, firstMove);
     }
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Main Methods ----------------------------------------------------

@@ -29,7 +29,18 @@ public class King extends Piece {
      * @param piecePosition where the King is on the board
      */
     public King(final Alliance pieceAlliance, final int piecePosition) {
-        super(KING, pieceAlliance, piecePosition);
+        super(KING, pieceAlliance, piecePosition, true);
+    }
+
+    /**
+     * Constructor for a King object.
+     *
+     * @param pieceAlliance White/Black
+     * @param piecePosition where the King is on the board
+     * @param firstMove     whether it is the King's first move
+     */
+    public King(final Alliance pieceAlliance, final int piecePosition, final boolean firstMove) {
+        super(KING, pieceAlliance, piecePosition, firstMove);
     }
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Main Methods ----------------------------------------------------

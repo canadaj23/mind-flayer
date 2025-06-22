@@ -29,7 +29,18 @@ public class Bishop extends Piece {
      * @param piecePosition where the Bishop is on the board
      */
     public Bishop(final Alliance pieceAlliance, final int piecePosition) {
-        super(BISHOP, pieceAlliance, piecePosition);
+        super(BISHOP, pieceAlliance, piecePosition, true);
+    }
+
+    /**
+     * Constructor for a Bishop object.
+     *
+     * @param pieceAlliance White/Black
+     * @param piecePosition where the Bishop is on the board
+     * @param firstMove     whether it is the Bishop's first move
+     */
+    public Bishop(final Alliance pieceAlliance, final int piecePosition, final boolean firstMove) {
+        super(BISHOP, pieceAlliance, piecePosition, firstMove);
     }
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Main Methods ----------------------------------------------------

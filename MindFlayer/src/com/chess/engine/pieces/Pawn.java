@@ -3,6 +3,8 @@ package com.chess.engine.pieces;
 import com.chess.engine.board.Board;
 import com.chess.engine.moves.other.MajorMove;
 import com.chess.engine.moves.Move;
+import com.chess.engine.moves.pawn.PawnAttackMove;
+import com.chess.engine.moves.pawn.PawnJump;
 import com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
@@ -27,7 +29,18 @@ public class Pawn extends Piece {
      * @param piecePosition where the Pawn is on the board
      */
     public Pawn(final Alliance pieceAlliance, final int piecePosition) {
-        super(PAWN, pieceAlliance, piecePosition);
+        super(PAWN, pieceAlliance, piecePosition, true);
+    }
+
+    /**
+     * Constructor for a Pawn object.
+     *
+     * @param pieceAlliance White/Black
+     * @param piecePosition where the Pawn is on the board
+     * @param firstMove     whether it is the Pawn's first move
+     */
+    public Pawn(final Alliance pieceAlliance, final int piecePosition, final boolean firstMove) {
+        super(PAWN, pieceAlliance, piecePosition, firstMove);
     }
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Main Methods ----------------------------------------------------
@@ -41,7 +54,7 @@ public class Pawn extends Piece {
     @Override
     public Collection<Move> calculateLegalMoves(final Board board) {
         final List<Move> legalMoves = new ArrayList<>();
-        // Iterate through all the offsets to determine the Queen's legal moves
+        // Iterate through all the offsets to determine the Pawn's legal moves
         for (final int currentOffset : PAWN_OFFSETS) {
             // Calculate the destination position
             final int destinationPosition = this.piecePosition +
@@ -64,7 +77,7 @@ public class Pawn extends Piece {
                     !board.getTile(destinationPosition).isTileOccupied()) {
                     // TODO: implement two-tile advance
                     // Two-tile advance
-                    legalMoves.add(new MajorMove(board, this, destinationPosition));
+                    legalMoves.add(new PawnJump(board, this, destinationPosition));
                 }
             } else if (currentOffset == 7 && !anyPawnFileExclusions(this.piecePosition, currentOffset)) {
                 if (board.getTile(destinationPosition).isTileOccupied()) {
@@ -74,7 +87,10 @@ public class Pawn extends Piece {
                     if (this.pieceAlliance != pieceAtDestination.getPieceAlliance()) {
                         // TODO: implement standard Pawn attack
                         // Standard Pawn attack
-                        legalMoves.add(new MajorMove(board, this, destinationPosition));
+                        legalMoves.add(new PawnAttackMove(board,
+                                                          this,
+                                                          destinationPosition,
+                                                          pieceAtDestination));
                     }
                 }
             } else if (currentOffset == 9 && !anyPawnFileExclusions(this.piecePosition, currentOffset)) {
@@ -85,7 +101,10 @@ public class Pawn extends Piece {
                     if (this.pieceAlliance != pieceAtDestination.getPieceAlliance()) {
                         // TODO: implement En Passant attack
                         // En Passant attack
-                        legalMoves.add(new MajorMove(board, this, destinationPosition));
+                        legalMoves.add(new PawnAttackMove(board,
+                                                          this,
+                                                          destinationPosition,
+                                                          pieceAtDestination));
                     }
                 }
             }

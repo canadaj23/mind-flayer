@@ -11,6 +11,8 @@ public abstract class Move {
     protected final Board board;
     protected final Piece movedPiece;
     protected final int destinationPosition;
+    protected final boolean firstMove;
+
     public static final Move NULL_MOVE = new NullMove();
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Constructor -----------------------------------------------------
@@ -26,6 +28,7 @@ public abstract class Move {
         this.board = board;
         this.movedPiece = movedPiece;
         this.destinationPosition = destinationPosition;
+        this.firstMove = movedPiece.isFirstMove();
     }
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Main Methods ----------------------------------------------------
@@ -98,6 +101,13 @@ public abstract class Move {
 
         return builder.build();
     }
+
+    private Move(final Board board, final int destinationPosition) {
+        this.board = board;
+        this.destinationPosition = destinationPosition;
+        this.movedPiece = null;
+        this.firstMove = false;
+    }
 //----------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------- Special Overridden Methods ---------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -118,7 +128,8 @@ public abstract class Move {
         }
         final Move otherMove = (Move) other;
 
-        return getDestinationPosition() == otherMove.getDestinationPosition() &&
+        return getCurrentPosition() == otherMove.getCurrentPosition() &&
+               getDestinationPosition() == otherMove.getDestinationPosition() &&
                getMovedPiece().equals(otherMove.getMovedPiece());
     }
 
@@ -130,6 +141,7 @@ public abstract class Move {
         int result = 1;
         result = 31 * result + this.destinationPosition;
         result = 31 * result + this.movedPiece.hashCode();
+        result = 31 * result + this.movedPiece.getPiecePosition();
         return result;
     }
 //----------------------------------------------------------------------------------------------------------------------

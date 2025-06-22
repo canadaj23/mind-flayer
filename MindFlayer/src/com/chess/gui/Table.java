@@ -43,7 +43,7 @@ public class Table {
     private boolean highlightLegalMoves;
 
     // Frame/Panel dimensions
-    private final static float SCALE = 1.5f;
+    protected final static float SCALE = 1.5f;
     private final static Dimension OUTER_FRAME_DIMENSION = new Dimension((int) (600 * SCALE), (int) (600 * SCALE));
     private final static Dimension BOARD_PANEL_DIMENSION = new Dimension((int) (400 * SCALE), (int) (350 * SCALE));
     private final static Dimension TILE_PANEL_DIMENSION = new Dimension((int) (10 * SCALE), (int) (10 * SCALE));
@@ -134,9 +134,9 @@ public class Table {
 
         // Create and add a highlight option
         final JCheckBoxMenuItem highlightCheckBox = new JCheckBoxMenuItem("Highlight Legal Moves",
-                                                                                false);
+                false);
         highlightCheckBox.addActionListener(actionEvent -> highlightLegalMoves =
-                                                                      highlightCheckBox.isSelected());
+                highlightCheckBox.isSelected());
         preferencesMenu.add(highlightCheckBox);
 
         return preferencesMenu;
@@ -187,6 +187,7 @@ public class Table {
         //--------------------------------------------------------------------------------------------------------------
         //---------------------------------------------- Abstract Methods ----------------------------------------------
         //--------------------------------------------------------------------------------------------------------------
+
         /**
          * @param boardTiles the tiles on the chess board
          * @return how to traverse boardTiles (either in the normal or flipped direction)
@@ -206,18 +207,20 @@ public class Table {
      */
     private class BoardPanel extends JPanel {
         final List<TilePanel> boardTiles;
-    //------------------------------------------------------------------------------------------------------------------
-    //-------------------------------------------------- Constructor ---------------------------------------------------
-    //------------------------------------------------------------------------------------------------------------------
+
+        //------------------------------------------------------------------------------------------------------------------
+        //-------------------------------------------------- Constructor ---------------------------------------------------
+        //------------------------------------------------------------------------------------------------------------------
         protected BoardPanel() {
             super(new GridLayout(8, 8));
             this.boardTiles = createAllTiles();
             setPreferredSize(BOARD_PANEL_DIMENSION);
             validate();
         }
-    //------------------------------------------------------------------------------------------------------------------
-    //-------------------------------------------------- Main Methods --------------------------------------------------
-    //------------------------------------------------------------------------------------------------------------------
+        //------------------------------------------------------------------------------------------------------------------
+        //-------------------------------------------------- Main Methods --------------------------------------------------
+        //------------------------------------------------------------------------------------------------------------------
+
         /**
          * @return a List of TilePanel objects
          */
@@ -236,6 +239,7 @@ public class Table {
 
         /**
          * Draws the next chess board in succession.
+         *
          * @param board the new board to draw
          */
         public void drawBoard(final Board board) {
@@ -258,6 +262,7 @@ public class Table {
      */
     private class TilePanel extends JPanel {
         private final int tileID;
+
         //--------------------------------------------------------------------------------------------------------------
         //------------------------------------------------ Constructor -------------------------------------------------
         //--------------------------------------------------------------------------------------------------------------
@@ -299,8 +304,8 @@ public class Table {
                             destinationTile = chessBoard.getTile(tileID);
                             // Determine the move to be made
                             final Move move = CreateMove(chessBoard,
-                                                         sourceTile.getTilePosition(),
-                                                         destinationTile.getTilePosition());
+                                    sourceTile.getTilePosition(),
+                                    destinationTile.getTilePosition());
                             // Determine the move transition
                             final MoveTransition transition = chessBoard.getCurrentPlayer().makeMove(move);
                             // Determine whether the move is done
@@ -318,16 +323,20 @@ public class Table {
                 }
 
                 @Override
-                public void mousePressed(final MouseEvent e) {}
+                public void mousePressed(final MouseEvent e) {
+                }
 
                 @Override
-                public void mouseReleased(final MouseEvent e) {}
+                public void mouseReleased(final MouseEvent e) {
+                }
 
                 @Override
-                public void mouseEntered(final MouseEvent e) {}
+                public void mouseEntered(final MouseEvent e) {
+                }
 
                 @Override
-                public void mouseExited(final MouseEvent e) {}
+                public void mouseExited(final MouseEvent e) {
+                }
             });
 
             validate();
@@ -335,8 +344,10 @@ public class Table {
         //--------------------------------------------------------------------------------------------------------------
         //------------------------------------------------ Main Methods ------------------------------------------------
         //--------------------------------------------------------------------------------------------------------------
+
         /**
          * Assigns an image for each piece.
+         *
          * @param board what the pieces are on
          */
         private void assignTilePieceIcon(final Board board) {
@@ -369,6 +380,7 @@ public class Table {
 
         /**
          * Draws a new tile for the corresponding chess board.
+         *
          * @param board where the tile will be
          */
         public void drawTile(final Board board) {
@@ -396,11 +408,81 @@ public class Table {
 
         private Collection<Move> pieceLegalMoves(final Board board) {
             if (humanMovedPiece != null &&
-                humanMovedPiece.getPieceAlliance() == board.getCurrentPlayer().getAlliance()) {
+                    humanMovedPiece.getPieceAlliance() == board.getCurrentPlayer().getAlliance()) {
                 return humanMovedPiece.calculateLegalMoves(board);
             }
 
             return Collections.emptyList();
+        }
+    }
+
+//######################################################################################################################
+//######################################################## MoveLog #####################################################
+//######################################################################################################################
+    public static class MoveLog {
+        private final List<Move> moves;
+        //--------------------------------------------------------------------------------------------------------------
+        //------------------------------------------------ Constructor -------------------------------------------------
+        //--------------------------------------------------------------------------------------------------------------
+
+        /**
+         * Constructor for a MoveLog object.
+         */
+        protected MoveLog() {
+            this.moves = new ArrayList<>();
+        }
+
+        //--------------------------------------------------------------------------------------------------------------
+        //------------------------------------------------ Main Methods ------------------------------------------------
+        //--------------------------------------------------------------------------------------------------------------
+        /**
+         * @return the list of moves
+         */
+        public List<Move> getMoves() {
+            return this.moves;
+        }
+
+        /**
+         * Adds a move to the move log.
+         *
+         * @param move what will be added to the move log
+         */
+        public void addMove(final Move move) {
+            this.moves.add(move);
+        }
+
+        /**
+         * @return the size of the move log
+         */
+        public int getSize() {
+            return this.moves.size();
+        }
+
+        /**
+         * Clears the move log.
+         */
+        public void clear() {
+            this.moves.clear();
+        }
+
+        /**
+         * Removes and returns the move from the move log based on the index.
+         *
+         * @param index where the move is in the move log
+         * @return the removed move
+         */
+        public Move removeMove(final int index) {
+            return this.moves.remove(index);
+        }
+
+        /**
+         * Determines whether a move could be removed from the move log.
+         *
+         * @param move the move to remove from the move log
+         * @return whether a move could be removed from the move log
+         */
+        public boolean removeMove(final Move move) {
+            return this.moves.remove(move);
         }
     }
 }

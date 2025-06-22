@@ -29,7 +29,18 @@ public class Queen extends Piece {
      * @param piecePosition where the Queen is on the board
      */
     public Queen(final Alliance pieceAlliance, final int piecePosition) {
-        super(QUEEN, pieceAlliance, piecePosition);
+        super(QUEEN, pieceAlliance, piecePosition, true);
+    }
+
+    /**
+     * Constructor for a Queen object.
+     *
+     * @param pieceAlliance White/Black
+     * @param piecePosition where the Queen is on the board
+     * @param firstMove     whether it is the Queen's first move
+     */
+    public Queen(final Alliance pieceAlliance, final int piecePosition, final boolean firstMove) {
+        super(QUEEN, pieceAlliance, piecePosition, firstMove);
     }
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Main Methods ----------------------------------------------------
