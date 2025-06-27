@@ -10,8 +10,16 @@ public enum Alliance {
          * @return the direction the Pawns go in a certain alliance
          */
         @Override
-        public int getPawnDirection() {
+        public int getDirection() {
             return -1;
+        }
+
+        /**
+         * @return the opposite direction of the Pawn
+         */
+        @Override
+        public int getOppositeDirection() {
+            return 1;
         }
 
         /**
@@ -45,8 +53,16 @@ public enum Alliance {
          * @return the direction the Pawns go in a certain alliance
          */
         @Override
-        public int getPawnDirection() {
+        public int getDirection() {
             return 1;
+        }
+
+        /**
+         * @return the opposite direction of the Pawn
+         */
+        @Override
+        public int getOppositeDirection() {
+            return -1;
         }
 
         /**
@@ -78,11 +94,10 @@ public enum Alliance {
 //----------------------------------------------------------------------------------------------------------------------
 //-------------------------------------------------- Abstract Methods --------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
-
     /**
      * @return the direction the Pawns go in a certain alliance
      */
-    public abstract int getPawnDirection();
+    public abstract int getDirection();
 
     /**
      * @return whether the piece is white
@@ -100,4 +115,9 @@ public enum Alliance {
      * @return whose turn it is
      */
     public abstract Player choosePlayer(final WhitePlayer whitePlayer, final BlackPlayer blackPlayer);
+
+    /**
+     * @return the opposite direction of the Pawn
+     */
+    public abstract int getOppositeDirection();
 }

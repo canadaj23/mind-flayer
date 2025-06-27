@@ -2,6 +2,7 @@ package com.chess.engine.pieces;
 
 import com.chess.engine.board.Board;
 import com.chess.engine.moves.other.AttackMove;
+import com.chess.engine.moves.other.MajorAttackMove;
 import com.chess.engine.moves.other.MajorMove;
 import com.chess.engine.moves.Move;
 import com.chess.engine.tiles.Tile;
@@ -80,7 +81,10 @@ public class Queen extends Piece {
                         // Determine whether the piece is the opponent's
                         if (this.pieceAlliance != pieceOnTile.getPieceAlliance()) {
                             // The move counts as attacking the opponent's piece
-                            legalMoves.add(new AttackMove(board, this, destinationPosition, pieceOnTile));
+                            legalMoves.add(new MajorAttackMove(board,
+                                                               this,
+                                                               destinationPosition,
+                                                               pieceOnTile));
                         }
                         break;
                     }

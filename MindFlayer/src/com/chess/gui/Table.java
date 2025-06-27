@@ -54,7 +54,7 @@ public class Table {
     private final Color darkTileColor = Color.decode("#769656");
 
     // Images location
-    protected final static String DEFAULT_IMAGE_PATH = "res/pieces/plain/";
+    protected final static String DEFAULT_IMAGE_PATH = "res/pieces/chess_com/";
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Constructor -----------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------

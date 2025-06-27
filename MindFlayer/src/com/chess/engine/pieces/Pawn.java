@@ -1,10 +1,11 @@
 package com.chess.engine.pieces;
 
 import com.chess.engine.board.Board;
-import com.chess.engine.moves.other.MajorMove;
 import com.chess.engine.moves.Move;
 import com.chess.engine.moves.pawn.PawnAttackMove;
+import com.chess.engine.moves.pawn.PawnEnPassantAttackMove;
 import com.chess.engine.moves.pawn.PawnJump;
+import com.chess.engine.moves.pawn.PawnMove;
 import com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class Pawn extends Piece {
         for (final int currentOffset : PAWN_OFFSETS) {
             // Calculate the destination position
             final int destinationPosition = this.piecePosition +
-                                            (this.getPieceAlliance().getPawnDirection() * currentOffset);
+                                            (this.getPieceAlliance().getDirection() * currentOffset);
             // Move on to the next offset if the tile ahead of the Pawn is occupied
             if (!IsDestinationPositionValid(destinationPosition)) {
                 continue;
@@ -67,11 +68,11 @@ public class Pawn extends Piece {
             if (currentOffset == 8 && !board.getTile(destinationPosition).isTileOccupied()) {
                 // TODO: implement one-tile advance with/without Pawn promotion
                 // One-tile advance with possible Pawn promotion
-                legalMoves.add(new MajorMove(board, this, destinationPosition));
+                legalMoves.add(new PawnMove(board, this, destinationPosition));
             } else if (currentOffset == 16 && this.isFirstMove() && pawnInInitialPosition()) {
                 // Determine the position between the start and destination positions
                 final int positionBetweenStartDestination = this.piecePosition +
-                                                            (this.pieceAlliance.getPawnDirection() * 8);
+                                                            (this.pieceAlliance.getDirection() * 8);
                 // Determine if the two tiles in front of the Pawn are empty
                 if (!board.getTile(positionBetweenStartDestination).isTileOccupied() &&
                     !board.getTile(destinationPosition).isTileOccupied()) {
@@ -80,6 +81,7 @@ public class Pawn extends Piece {
                     legalMoves.add(new PawnJump(board, this, destinationPosition));
                 }
             } else if (currentOffset == 7 && !anyPawnFileExclusions(this.piecePosition, currentOffset)) {
+                // Determine whether the tile is occupied
                 if (board.getTile(destinationPosition).isTileOccupied()) {
                     // Determine the piece on the occupied tile
                     final Piece pieceAtDestination = board.getTile(destinationPosition).getPiece();
@@ -92,8 +94,24 @@ public class Pawn extends Piece {
                                                           destinationPosition,
                                                           pieceAtDestination));
                     }
+                } else if (board.getEnPassantPawn() != null) {
+                    // Determine whether the En Passant Pawn is adjacent to another Pawn
+                    if (board.getEnPassantPawn().getPiecePosition() ==
+                        this.piecePosition + this.pieceAlliance.getOppositeDirection()) {
+                        // Get the piece at the destination (the En Passant Pawn)
+                        final Piece pieceAtDestination = board.getEnPassantPawn();
+                        // Determine whether the En Passant Pawn is friendly
+                        if (this.pieceAlliance != pieceAtDestination.getPieceAlliance()) {
+                            // Capture the En Passant Pawn
+                            legalMoves.add(new PawnEnPassantAttackMove(board,
+                                                                       this,
+                                                                       destinationPosition,
+                                                                       pieceAtDestination));
+                        }
+                    }
                 }
             } else if (currentOffset == 9 && !anyPawnFileExclusions(this.piecePosition, currentOffset)) {
+                // Determine whether the tile is occupied
                 if (board.getTile(destinationPosition).isTileOccupied()) {
                     // Determine the piece on the occupied tile
                     final Piece pieceAtDestination = board.getTile(destinationPosition).getPiece();
@@ -105,6 +123,21 @@ public class Pawn extends Piece {
                                                           this,
                                                           destinationPosition,
                                                           pieceAtDestination));
+                    }
+                } else if (board.getEnPassantPawn() != null) {
+                    // Determine whether the En Passant Pawn is adjacent to another Pawn
+                    if (board.getEnPassantPawn().getPiecePosition() ==
+                            this.piecePosition - this.pieceAlliance.getOppositeDirection()) {
+                        // Get the piece at the destination (the En Passant Pawn)
+                        final Piece pieceAtDestination = board.getEnPassantPawn();
+                        // Determine whether the En Passant Pawn is friendly
+                        if (this.pieceAlliance != pieceAtDestination.getPieceAlliance()) {
+                            // Capture the En Passant Pawn
+                            legalMoves.add(new PawnEnPassantAttackMove(board,
+                                    this,
+                                    destinationPosition,
+                                    pieceAtDestination));
+                        }
                     }
                 }
             }

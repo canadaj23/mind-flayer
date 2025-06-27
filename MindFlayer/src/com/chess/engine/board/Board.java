@@ -26,6 +26,7 @@ public class Board {
     private final WhitePlayer whitePlayer;
     private final BlackPlayer blackPlayer;
     private final Player currentPlayer;
+    private final Pawn enPassantPawn;
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Constructor -----------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -38,6 +39,8 @@ public class Board {
         this.gameBoard = createGameBoard(builder);
         this.whitePieces = CalculateActivePieces(this.gameBoard, WHITE);
         this.blackPieces = CalculateActivePieces(this.gameBoard, BLACK);
+
+        this.enPassantPawn = builder.enPassantPawn;
 
         final Collection<Move> whiteStandardLegalMoves = CalculateLegalMoves(this.whitePieces);
         final Collection<Move> blackStandardLegalMoves = CalculateLegalMoves(this.blackPieces);
@@ -57,6 +60,13 @@ public class Board {
      */
     public Tile getTile(final int tilePosition) {
         return gameBoard.get(tilePosition);
+    }
+
+    /**
+     * @return the Pawn that made a two-tile advance in the prior move
+     */
+    public Pawn getEnPassantPawn() {
+        return this.enPassantPawn;
     }
 
     /**
