@@ -32,8 +32,11 @@ import static javax.swing.SwingUtilities.*;
  */
 public class Table {
     private final JFrame gameFrame;
+    private final GameHistoryPanel gameHistoryPanel;
+    private final TakenPiecesPanel takenPiecesPanel;
     private final BoardPanel boardPanel;
     private Board chessBoard;
+    private final MoveLog moveLog;
 
     // Used for TilePanel
     private Tile sourceTile, destinationTile;
@@ -53,7 +56,7 @@ public class Table {
     private final Color darkTileColor = Color.decode("#769656");
 
     // Images location
-    private final String defaultImagePath = "res/pieces/chess_com/";
+    private final String defaultImagePath = "res/pieces/plain/";
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Constructor -----------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -69,10 +72,15 @@ public class Table {
 
         this.chessBoard = createStandardBoard();
 
+        this.gameHistoryPanel = new GameHistoryPanel();
+        this.takenPiecesPanel = new TakenPiecesPanel();
         this.boardPanel = new BoardPanel();
+        this.moveLog = new MoveLog();
         this.boardDirection = BoardDirection.NORMAL;
         this.highlightLegalMoves = false;
+        this.gameFrame.add(this.takenPiecesPanel, BorderLayout.WEST);
         this.gameFrame.add(this.boardPanel, BorderLayout.CENTER);
+        this.gameFrame.add(this.gameHistoryPanel, BorderLayout.EAST);
 
         this.gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.gameFrame.setResizable(false);
@@ -207,7 +215,6 @@ public class Table {
      */
     private class BoardPanel extends JPanel {
         final List<TilePanel> boardTiles;
-
         //------------------------------------------------------------------------------------------------------------------
         //-------------------------------------------------- Constructor ---------------------------------------------------
         //------------------------------------------------------------------------------------------------------------------
@@ -220,7 +227,6 @@ public class Table {
         //------------------------------------------------------------------------------------------------------------------
         //-------------------------------------------------- Main Methods --------------------------------------------------
         //------------------------------------------------------------------------------------------------------------------
-
         /**
          * @return a List of TilePanel objects
          */
@@ -244,12 +250,10 @@ public class Table {
          */
         public void drawBoard(final Board board) {
             removeAll();
-
             for (final TilePanel tilePanel : boardDirection.traverse(boardTiles)) {
                 tilePanel.drawTile(board);
                 add(tilePanel);
             }
-
             validate();
             repaint();
         }
@@ -312,13 +316,20 @@ public class Table {
                             if (transition.getMoveStatus().isDone()) {
                                 // Proceed to the updated chess board
                                 chessBoard = transition.getTransitionBoard();
-                                // TODO: add the completed move to the move log
+                                moveLog.addMove(move);
                             }
                             sourceTile = null;
                             destinationTile = null;
                             humanMovedPiece = null;
+                            System.out.println("-------------------- UPDATED BOARD --------------------");
+                            System.out.println(chessBoard);
+                            System.out.println("-------------------------------------------------------");
                         }
-                        invokeLater(() -> boardPanel.drawBoard(chessBoard));
+                        invokeLater(() -> {
+                            gameHistoryPanel.redo(chessBoard, moveLog);
+                            takenPiecesPanel.redo(moveLog);
+                            boardPanel.drawBoard(chessBoard);
+                        });
                     }
                 }
 
@@ -415,7 +426,6 @@ public class Table {
             return Collections.emptyList();
         }
     }
-
 //######################################################################################################################
 //######################################################## MoveLog #####################################################
 //######################################################################################################################
@@ -424,14 +434,12 @@ public class Table {
         //--------------------------------------------------------------------------------------------------------------
         //------------------------------------------------ Constructor -------------------------------------------------
         //--------------------------------------------------------------------------------------------------------------
-
         /**
          * Constructor for a MoveLog object.
          */
         protected MoveLog() {
             this.moves = new ArrayList<>();
         }
-
         //--------------------------------------------------------------------------------------------------------------
         //------------------------------------------------ Main Methods ------------------------------------------------
         //--------------------------------------------------------------------------------------------------------------

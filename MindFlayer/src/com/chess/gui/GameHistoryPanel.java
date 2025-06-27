@@ -49,7 +49,7 @@ public class GameHistoryPanel extends JPanel {
                 this.model.setValueAt(moveText, currentRow, 0);
             } else if (move.getMovedPiece().getPieceAlliance().isBlack()) {
                 // Display the move in Black's column
-                this.model.setValueAt(moveText, currentRow, 1);
+                this.model.setValueAt(moveText.toLowerCase(), currentRow, 1);
                 currentRow++;
             }
         }
@@ -60,8 +60,12 @@ public class GameHistoryPanel extends JPanel {
 
             if (lastMove.getMovedPiece().getPieceAlliance().isWhite()) {
                 this.model.setValueAt(moveText + calculateCheckCheckMateHash(board),
-                                      currentRow - 1,
-                                      1);
+                                      currentRow,
+                                      0);
+            } else if (lastMove.getMovedPiece().getPieceAlliance().isBlack()) {
+                this.model.setValueAt(moveText.toLowerCase() + calculateCheckCheckMateHash(board),
+                        currentRow - 1,
+                        1);
             }
         }
         // Auto scroll when moves start to leave the panel
@@ -157,6 +161,7 @@ public class GameHistoryPanel extends JPanel {
             }
             if (column == 0) {
                 currentRow.setWhiteMove((String) aValue);
+                fireTableRowsInserted(row, row);
             } else if (column == 1) {
                 currentRow.setBlackMove((String) aValue);
                 fireTableCellUpdated(row, column);
@@ -216,7 +221,7 @@ public class GameHistoryPanel extends JPanel {
          * @param move what to set whiteMove to
          */
         public void setWhiteMove(final String move) {
-            this.whiteMove = whiteMove;
+            this.whiteMove = move;
         }
 
         /**
@@ -225,7 +230,7 @@ public class GameHistoryPanel extends JPanel {
          * @param move what to set blackMove to
          */
         public void setBlackMove(final String move) {
-            this.blackMove = blackMove;
+            this.blackMove = move;
         }
     }
 }

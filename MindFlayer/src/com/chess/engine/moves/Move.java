@@ -30,6 +30,19 @@ public abstract class Move {
         this.destinationPosition = destinationPosition;
         this.firstMove = movedPiece.isFirstMove();
     }
+
+    /**
+     * Constructor for a Move object.
+     *
+     * @param board               where the move takes place
+     * @param destinationPosition where the piece wants to move to
+     */
+    protected Move(final Board board, final int destinationPosition) {
+        this.board = board;
+        this.destinationPosition = destinationPosition;
+        this.movedPiece = null;
+        this.firstMove = false;
+    }
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Main Methods ----------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -100,13 +113,6 @@ public abstract class Move {
         builder.setMoveMaker(this.board.getCurrentPlayer().getOpponent().getAlliance());
 
         return builder.build();
-    }
-
-    private Move(final Board board, final int destinationPosition) {
-        this.board = board;
-        this.destinationPosition = destinationPosition;
-        this.movedPiece = null;
-        this.firstMove = false;
     }
 //----------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------- Special Overridden Methods ---------------------------------------------

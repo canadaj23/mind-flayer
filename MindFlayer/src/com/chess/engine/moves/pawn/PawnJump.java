@@ -6,6 +6,7 @@ import com.chess.engine.pieces.Pawn;
 import com.chess.engine.pieces.Piece;
 
 import static com.chess.engine.board.Board.*;
+import static com.chess.engine.board.BoardUtils.GetPositionStringAtPosition;
 
 /**
  * This class represents the Pawn two-tile advance.
@@ -42,7 +43,7 @@ public final class PawnJump extends Move {
             }
         }
         // Set all the opponent's pieces on the same tiles (no moved pieces)
-        for (final Piece piece : this.board.getCurrentPlayer().getActivePieces()) {
+        for (final Piece piece : this.board.getCurrentPlayer().getOpponent().getActivePieces()) {
             builder.setPiece(piece);
         }
         // Determine the moved Pawn
@@ -55,5 +56,10 @@ public final class PawnJump extends Move {
         builder.setMoveMaker(this.board.getCurrentPlayer().getOpponent().getAlliance());
 
         return builder.build();
+    }
+
+    @Override
+    public String toString() {
+        return GetPositionStringAtPosition(this.destinationPosition);
     }
 }

@@ -57,8 +57,8 @@ public class TakenPiecesPanel extends JPanel {
     }
 
     public void redo(final MoveLog moveLog) {
-        this.northPanel.removeAll();
         this.southPanel.removeAll();
+        this.northPanel.removeAll();
 
         final List<Piece> whiteTakenPieces = new ArrayList<>();
         final List<Piece> blackTakenPieces = new ArrayList<>();
@@ -109,7 +109,7 @@ public class TakenPiecesPanel extends JPanel {
                 final ImageIcon icon = new ImageIcon(image);
                 final JLabel imageLabel = new JLabel();
                 directionPanel.add(imageLabel);
-            } catch (IOException e) {
+            } catch (final IOException e) {
                 e.printStackTrace();
             }
         }
