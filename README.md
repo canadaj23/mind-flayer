@@ -5,5 +5,4 @@
 <h2>Extra Info</h2>
 <p> Chess piece icons are from: https://github.com/GiorgioMegrelli/chess.com-boards-and-pieces/tree/master</p>
 <p> This project utilizes the Guava library: https://github.com/google/guava/releases </p>
-<p> This project also utilizes the Thumbnailator library for BufferedImages: https://github.com/coobird/thumbnailator</p>
 <p> Software Architecture & Design's version: https://github.com/amir650/BlackWidow-Chess </p>
