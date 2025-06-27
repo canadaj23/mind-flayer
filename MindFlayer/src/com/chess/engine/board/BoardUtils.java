@@ -43,7 +43,6 @@ public class BoardUtils {
         return stringIntegerMap;
     }
 
-
     /**
      * @param position where the piece is on the board
      * @return the position in tile number notation (a8 to 0)

@@ -47,6 +47,17 @@ public enum Alliance {
         public Player choosePlayer(final WhitePlayer whitePlayer, final BlackPlayer blackPlayer) {
             return whitePlayer;
         }
+
+        /**
+         * @param position where the Pawn wants to move to
+         * @return whether the square allows for a Pawn to be promoted
+         */
+        @Override
+        public boolean isPawnPromotionSquare(final int position) {
+            // rank is not needed, but provides better readability
+            final int rank = (position / 8) + 1;
+            return rank == 1;
+        }
     },
     BLACK {
         /**
@@ -90,6 +101,17 @@ public enum Alliance {
         public Player choosePlayer(final WhitePlayer whitePlayer, final BlackPlayer blackPlayer) {
             return blackPlayer;
         }
+
+        /**
+         * @param position where the Pawn wants to move to
+         * @return whether the square allows for a Pawn to be promoted
+         */
+        @Override
+        public boolean isPawnPromotionSquare(final int position) {
+            // rank is not needed, but provides better readability
+            final int rank = (position / 8) + 1;
+            return rank == 8;
+        }
     };
 //----------------------------------------------------------------------------------------------------------------------
 //-------------------------------------------------- Abstract Methods --------------------------------------------------
@@ -120,4 +142,10 @@ public enum Alliance {
      * @return the opposite direction of the Pawn
      */
     public abstract int getOppositeDirection();
+
+    /**
+     * @param position where the Pawn wants to move to
+     * @return whether the square allows for a Pawn to be promoted
+     */
+    public abstract boolean isPawnPromotionSquare(final int position);
 }

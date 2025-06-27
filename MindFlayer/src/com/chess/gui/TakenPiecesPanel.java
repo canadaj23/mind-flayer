@@ -106,9 +106,10 @@ public class TakenPiecesPanel extends JPanel {
                         ImageIO.read(new File(
                                               DEFAULT_IMAGE_PATH +
                                               takenPiece.getPieceAlliance().toString().charAt(0) +
-                                              takenPiece.toString()));
+                                              takenPiece.toString() +
+                                              ".png"));
                 final ImageIcon icon = new ImageIcon(image);
-                final JLabel imageLabel = new JLabel();
+                final JLabel imageLabel = new JLabel(icon);
                 directionPanel.add(imageLabel);
             } catch (final IOException e) {
                 e.printStackTrace();

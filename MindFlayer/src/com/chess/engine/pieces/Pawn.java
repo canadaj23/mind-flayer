@@ -2,10 +2,7 @@ package com.chess.engine.pieces;
 
 import com.chess.engine.board.Board;
 import com.chess.engine.moves.Move;
-import com.chess.engine.moves.pawn.PawnAttackMove;
-import com.chess.engine.moves.pawn.PawnEnPassantAttackMove;
-import com.chess.engine.moves.pawn.PawnJump;
-import com.chess.engine.moves.pawn.PawnMove;
+import com.chess.engine.moves.pawn.*;
 import com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;
@@ -65,85 +62,134 @@ public class Pawn extends Piece {
                 continue;
             }
             // Figure out what to do with an empty/occupied tile
-            if (currentOffset == 8 && !board.getTile(destinationPosition).isTileOccupied()) {
-                // TODO: implement one-tile advance with/without Pawn promotion
-                // One-tile advance with possible Pawn promotion
-                legalMoves.add(new PawnMove(board, this, destinationPosition));
-            } else if (currentOffset == 16 && this.isFirstMove() && pawnInInitialPosition()) {
-                // Determine the position between the start and destination positions
-                final int positionBetweenStartDestination = this.piecePosition +
-                                                            (this.pieceAlliance.getDirection() * 8);
-                // Determine if the two tiles in front of the Pawn are empty
-                if (!board.getTile(positionBetweenStartDestination).isTileOccupied() &&
-                    !board.getTile(destinationPosition).isTileOccupied()) {
-                    // TODO: implement two-tile advance
-                    // Two-tile advance
-                    legalMoves.add(new PawnJump(board, this, destinationPosition));
-                }
-            } else if (currentOffset == 7 && !anyPawnFileExclusions(this.piecePosition, currentOffset)) {
-                // Determine whether the tile is occupied
-                if (board.getTile(destinationPosition).isTileOccupied()) {
-                    // Determine the piece on the occupied tile
-                    final Piece pieceAtDestination = board.getTile(destinationPosition).getPiece();
-                    // Determine whether the piece is friendly
-                    if (this.pieceAlliance != pieceAtDestination.getPieceAlliance()) {
-                        // TODO: implement standard Pawn attack
-                        // Standard Pawn attack
-                        legalMoves.add(new PawnAttackMove(board,
-                                                          this,
-                                                          destinationPosition,
-                                                          pieceAtDestination));
-                    }
-                } else if (board.getEnPassantPawn() != null) {
-                    // Determine whether the En Passant Pawn is adjacent to another Pawn
-                    if (board.getEnPassantPawn().getPiecePosition() ==
-                        this.piecePosition + this.pieceAlliance.getOppositeDirection()) {
-                        // Get the piece at the destination (the En Passant Pawn)
-                        final Piece pieceAtDestination = board.getEnPassantPawn();
-                        // Determine whether the En Passant Pawn is friendly
-                        if (this.pieceAlliance != pieceAtDestination.getPieceAlliance()) {
-                            // Capture the En Passant Pawn
-                            legalMoves.add(new PawnEnPassantAttackMove(board,
-                                                                       this,
-                                                                       destinationPosition,
-                                                                       pieceAtDestination));
-                        }
-                    }
-                }
-            } else if (currentOffset == 9 && !anyPawnFileExclusions(this.piecePosition, currentOffset)) {
-                // Determine whether the tile is occupied
-                if (board.getTile(destinationPosition).isTileOccupied()) {
-                    // Determine the piece on the occupied tile
-                    final Piece pieceAtDestination = board.getTile(destinationPosition).getPiece();
-                    // Determine whether the piece is friendly
-                    if (this.pieceAlliance != pieceAtDestination.getPieceAlliance()) {
-                        // TODO: implement En Passant attack
-                        // En Passant attack
-                        legalMoves.add(new PawnAttackMove(board,
-                                                          this,
-                                                          destinationPosition,
-                                                          pieceAtDestination));
-                    }
-                } else if (board.getEnPassantPawn() != null) {
-                    // Determine whether the En Passant Pawn is adjacent to another Pawn
-                    if (board.getEnPassantPawn().getPiecePosition() ==
-                            this.piecePosition - this.pieceAlliance.getOppositeDirection()) {
-                        // Get the piece at the destination (the En Passant Pawn)
-                        final Piece pieceAtDestination = board.getEnPassantPawn();
-                        // Determine whether the En Passant Pawn is friendly
-                        if (this.pieceAlliance != pieceAtDestination.getPieceAlliance()) {
-                            // Capture the En Passant Pawn
-                            legalMoves.add(new PawnEnPassantAttackMove(board,
-                                    this,
-                                    destinationPosition,
-                                    pieceAtDestination));
-                        }
-                    }
-                }
+            if (!board.getTile(destinationPosition).isTileOccupied()) {
+                performPawnMove(board, destinationPosition, legalMoves, currentOffset);
+            } else if ((currentOffset == 7 || currentOffset == 9) &&
+                       !anyPawnFileExclusions(this.piecePosition, currentOffset)) {
+                performPawnAttack(board, destinationPosition, legalMoves, currentOffset);
             }
         }
 
         return ImmutableList.copyOf(legalMoves);
+    }
+
+    /**
+     * Determines which Pawn advancement to perform.
+     * It will either be a one-tile advance or two-tile advance.
+     *
+     * @param board               where the Pawn advancement takes place
+     * @param destinationPosition where the Pawn will move to
+     * @param legalMoves          all the Pawn's legal moves
+     * @param currentOffset       the current offset for the Pawn's advancement
+     */
+    private void performPawnMove(final Board board,
+                                 final int destinationPosition,
+                                 final List<Move> legalMoves,
+                                 final int currentOffset) {
+        if (currentOffset == 8) {
+            // One-tile advance with possible Pawn promotion
+            if (this.pieceAlliance.isPawnPromotionSquare(destinationPosition)) {
+                // Pawn promotion
+                legalMoves.add(new PawnPromotion(new PawnMove(board, this, destinationPosition)));
+            } else {
+                // No Pawn promotion
+                legalMoves.add(new PawnMove(board, this, destinationPosition));
+            }
+        }
+        else if (currentOffset == 16) {
+            if (this.isFirstMove() && pawnInInitialPosition()) {
+                // Determine the position between the start and destination positions
+                final int positionBetweenStartDestination = this.piecePosition +
+                        (this.pieceAlliance.getDirection() * 8);
+                // Determine if the first tile in front of the Pawn is empty (the second one was checked above)
+                if (!board.getTile(positionBetweenStartDestination).isTileOccupied()) {
+                    // Two-tile advance
+                    legalMoves.add(new PawnJump(board, this, destinationPosition));
+                }
+            }
+        }
+    }
+
+    /**
+     * Determines which Pawn attack to perform.
+     * It will either be a standard Pawn attack or an En Passant attack.
+     *
+     * @param board               where the Pawn attack takes place
+     * @param destinationPosition where the Pawn will capture
+     * @param legalMoves          all the Pawn's legal moves
+     * @param currentOffset       the current offset for the Pawn's attack
+     */
+    private void performPawnAttack(final Board board,
+                                   final int destinationPosition,
+                                   final List<Move> legalMoves,
+                                   final int currentOffset) {
+        // Determine whether the tile is occupied
+        if (board.getTile(destinationPosition).isTileOccupied()) {
+            // Determine the piece on the occupied tile
+            final Piece pieceAtDestination = board.getTile(destinationPosition).getPiece();
+            // Determine whether the piece is friendly
+            if (this.pieceAlliance != pieceAtDestination.getPieceAlliance()) {
+                // Pawn attack with possible Pawn promotion
+                if (this.pieceAlliance.isPawnPromotionSquare(destinationPosition)) {
+                    // Pawn promotion
+                    legalMoves.add(new PawnPromotion(new PawnAttackMove(board,
+                            this,
+                            destinationPosition,
+                            pieceAtDestination)));
+                } else {
+                    // No Pawn promotion
+                    legalMoves.add(new PawnAttackMove(board,
+                            this,
+                            destinationPosition,
+                            pieceAtDestination));
+                }
+            }
+        } else if (board.getEnPassantPawn() != null) {
+            // See if an En Passant attack can be made
+            performEnPassantAttack(board,
+                    this.piecePosition,
+                    currentOffset,
+                    this.pieceAlliance,
+                    destinationPosition,
+                    legalMoves);
+        }
+    }
+
+    /**
+     * Performs a valid En Passant attack move.
+     *
+     * @param board               where the attack will take place
+     * @param piecePosition       where the attacking Pawn currently is
+     * @param currentOffset       the current offset of the attacking Pawn
+     * @param pieceAlliance       the attacking Pawn's alliance
+     * @param destinationPosition where the attacking Pawn wants to move to
+     * @param legalMoves          all the Pawn's legal moves
+     */
+    private void performEnPassantAttack(final Board board,
+                                        int piecePosition,
+                                        final int currentOffset,
+                                        final Alliance pieceAlliance,
+                                        final int destinationPosition,
+                                        final List<Move> legalMoves) {
+        // Determine which side the En Passant Pawn will be on
+        int adjacentPosition = 0;
+        switch (currentOffset) {
+            case 7 -> adjacentPosition = piecePosition + pieceAlliance.getOppositeDirection();
+            case 9 -> adjacentPosition = piecePosition - pieceAlliance.getOppositeDirection();
+        }
+        // Determine whether the En Passant Pawn is adjacent to another Pawn
+        if (board.getEnPassantPawn().getPiecePosition() == adjacentPosition) {
+            // Get the piece at the destination (the En Passant Pawn)
+            final Piece pieceAtDestination = board.getEnPassantPawn();
+            // Determine whether the En Passant Pawn is friendly
+            if (pieceAlliance != pieceAtDestination.getPieceAlliance()) {
+                // Capture the En Passant Pawn
+                legalMoves.add(new PawnEnPassantAttackMove(board,
+                        this,
+                        destinationPosition,
+                        pieceAtDestination));
+            }
+        }
     }
 
     /**
@@ -153,6 +199,15 @@ public class Pawn extends Piece {
     @Override
     public Pawn movePiece(final Move move) {
         return new Pawn(move.getMovedPiece().getPieceAlliance(), move.getDestinationPosition());
+    }
+
+    /**
+     * There will not be underpromotion (at least for now) for simplicity.
+     *
+     * @return a new Queen
+     */
+    public Piece getPromotionPiece() {
+        return new Queen(this.pieceAlliance, this.piecePosition, false);
     }
 //----------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------------- Helper Methods ---------------------------------------------------

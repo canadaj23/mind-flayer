@@ -89,6 +89,13 @@ public abstract class Move {
     }
 
     /**
+     * @return the current board in use
+     */
+    public Board getBoard() {
+        return this.board;
+    }
+
+    /**
      * @return a new board after the move is made (not mutating the current board!)
      */
     public Board execute() {
