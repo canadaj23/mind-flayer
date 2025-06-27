@@ -34,7 +34,6 @@ public final class PawnJump extends Move {
     @Override
     public Board execute() {
         final Builder builder = new Builder();
-
         // Set all the player's pieces on the same tiles except for the moved piece
         for (final Piece piece : this.board.getCurrentPlayer().getActivePieces()) {
             // Determine whether the piece is not the moved piece
@@ -57,7 +56,12 @@ public final class PawnJump extends Move {
 
         return builder.build();
     }
-
+//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------- Special Overridden Methods ---------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+    /**
+     * @return the String version of the Pawn two-tile advance in PGN format
+     */
     @Override
     public String toString() {
         return GetPositionStringAtPosition(this.destinationPosition);

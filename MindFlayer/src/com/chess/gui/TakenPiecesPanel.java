@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.chess.gui.Table.DEFAULT_IMAGE_PATH;
 import static com.chess.gui.Table.SCALE;
 
 /**
@@ -103,9 +104,9 @@ public class TakenPiecesPanel extends JPanel {
             try {
                 final BufferedImage image =
                         ImageIO.read(new File(
-                                "res/pieces/chess_com" +
-                                        takenPiece.getPieceAlliance().toString().charAt(0) +
-                                        takenPiece.toString()));
+                                              DEFAULT_IMAGE_PATH +
+                                              takenPiece.getPieceAlliance().toString().charAt(0) +
+                                              takenPiece.toString()));
                 final ImageIcon icon = new ImageIcon(image);
                 final JLabel imageLabel = new JLabel();
                 directionPanel.add(imageLabel);

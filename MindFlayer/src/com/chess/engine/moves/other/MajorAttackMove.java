@@ -1,28 +1,31 @@
 package com.chess.engine.moves.other;
 
 import com.chess.engine.board.Board;
-import com.chess.engine.board.BoardUtils;
-import com.chess.engine.moves.Move;
+import com.chess.engine.moves.pawn.PawnMove;
 import com.chess.engine.pieces.Piece;
 
 import static com.chess.engine.board.BoardUtils.GetPositionStringAtPosition;
 
 /**
- * This class represents a major (non-attacking) move.
+ * This class represents a major piece's attack (excluding the Pawn).
  */
-public class MajorMove extends Move {
+public class MajorAttackMove extends AttackMove {
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Constructor -----------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
     /**
-     * Constructor for a MajorMove object.
+     * Constructor for a MajorAttackMove object.
      *
      * @param board               where the move takes place
      * @param movedPiece          the piece to move
      * @param destinationPosition where the piece wants to move to
+     * @param attackedPiece       the piece under attack
      */
-    public MajorMove(final Board board, final Piece movedPiece, final int destinationPosition) {
-        super(board, movedPiece, destinationPosition);
+    public MajorAttackMove(final Board board,
+                           final Piece movedPiece,
+                           final int destinationPosition,
+                           final Piece attackedPiece) {
+        super(board, movedPiece, destinationPosition, attackedPiece);
     }
 //----------------------------------------------------------------------------------------------------------------------
 //--------------------------------------------- Special Overridden Methods ---------------------------------------------
@@ -35,14 +38,14 @@ public class MajorMove extends Move {
      */
     @Override
     public boolean equals(final Object other) {
-        return this == other || (other instanceof MajorMove && super.equals(other));
+        return this == other || (other instanceof MajorAttackMove && super.equals(other));
     }
 
     /**
-     * @return the String version of the major move
+     * @return the String version of a major attack move in PGN format
      */
     @Override
     public String toString() {
-        return movedPiece.getPieceType().toString() + GetPositionStringAtPosition(this.destinationPosition);
+        return movedPiece.getPieceType() + GetPositionStringAtPosition(this.destinationPosition);
     }
 }

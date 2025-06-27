@@ -12,9 +12,10 @@ public final class NullMove extends Move {
 //----------------------------------------------------------------------------------------------------------------------
     /**
      * Constructor for a NullMove object.
+     * The destination position is not on the board.
      */
     public NullMove() {
-        super(null, -1);
+        super(null, 65);
     }
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Main Methods ----------------------------------------------------
@@ -25,5 +26,15 @@ public final class NullMove extends Move {
     @Override
     public Board execute() {
         throw new RuntimeException("There is nothing to do since the move is null!");
+    }
+
+    /**
+     * The current position is not on the board.
+     *
+     * @return the position for a null move
+     */
+    @Override
+    public int getCurrentPosition() {
+        return -1;
     }
 }

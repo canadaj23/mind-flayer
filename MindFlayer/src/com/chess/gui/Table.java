@@ -10,8 +10,6 @@ import com.google.common.collect.Lists;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -56,7 +54,7 @@ public class Table {
     private final Color darkTileColor = Color.decode("#769656");
 
     // Images location
-    private final String defaultImagePath = "res/pieces/plain/";
+    protected final static String DEFAULT_IMAGE_PATH = "res/pieces/plain/";
 //----------------------------------------------------------------------------------------------------------------------
 //---------------------------------------------------- Constructor -----------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -367,7 +365,7 @@ public class Table {
             // Associate an image with an active piece for White/Black
             if (board.getTile(this.tileID).isTileOccupied()) {
                 try {
-                    final BufferedImage image = ImageIO.read(new File(defaultImagePath +
+                    final BufferedImage image = ImageIO.read(new File(DEFAULT_IMAGE_PATH +
                             board.getTile(this.tileID).getPiece().getPieceAlliance().toString().charAt(0) +
                             board.getTile(this.tileID).getPiece().toString() + ".png"));
 //                    final BufferedImage rescaledImage = Thumbnails.of(image)

@@ -78,4 +78,37 @@ abstract class CastleMove extends Move {
 
         return builder.build();
     }
+//----------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------- Special Overridden Methods ---------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+    /**
+     * Checks for object equality on top of reference equality.
+     *
+     * @param other the other possible move
+     * @return whether the two objects are the same
+     */
+    @Override
+    public boolean equals(final Object other) {
+        if (this == other) {
+            return true;
+        }
+
+        if (!(other instanceof CastleMove)) {
+            return false;
+        }
+        final CastleMove otherCastleMove = (CastleMove) other;
+
+        return super.equals(otherCastleMove) && this.castleRook.equals(otherCastleMove.getCastleRook());
+    }
+
+    /**
+     * @return a special hashcode for pieces
+     */
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + this.castleRook.hashCode();
+        result = 31 * result + this.castleRookEnd;
+        return result;
+    }
 }

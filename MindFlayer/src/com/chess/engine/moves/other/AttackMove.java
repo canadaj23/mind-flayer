@@ -32,14 +32,6 @@ public class AttackMove extends Move {
 //---------------------------------------------------- Main Methods ----------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
     /**
-     * @return a new board after the move is made
-     */
-    @Override
-    public Board execute() {
-        return null;
-    }
-
-    /**
      * @return whether the move is an attack
      */
     @Override

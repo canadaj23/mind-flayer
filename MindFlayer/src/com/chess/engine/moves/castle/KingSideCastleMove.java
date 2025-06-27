@@ -29,11 +29,14 @@ public final class KingSideCastleMove extends CastleMove {
 //--------------------------------------------- Special Overridden Methods ---------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
     /**
-     * @return a special hashcode for moves
+     * Checks for object equality on top of reference equality.
+     *
+     * @param other the other possible move
+     * @return whether the two objects are the same
      */
     @Override
-    public int hashCode() {
-        return 0;
+    public boolean equals(final Object other) {
+        return this == other || (other instanceof KingSideCastleMove && super.equals(other));
     }
 
     /**
